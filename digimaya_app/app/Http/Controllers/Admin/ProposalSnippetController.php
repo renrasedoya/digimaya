@@ -46,7 +46,7 @@ class ProposalSnippetController extends Controller
     {
         $validated = $request->validate($this->validationRules());
         $validated['is_active'] = $request->has('is_active');
-        $validated['body'] = clean($validated['body']);
+        $validated['body'] = clean($validated['body'] ?? '', 'blog');
 
         ProposalSnippet::create($validated);
 
@@ -64,7 +64,7 @@ class ProposalSnippetController extends Controller
     {
         $validated = $request->validate($this->validationRules());
         $validated['is_active'] = $request->has('is_active');
-        $validated['body'] = clean($validated['body']);
+        $validated['body'] = clean($validated['body'] ?? '', 'blog');
 
         $proposalSnippet->update($validated);
 
@@ -87,7 +87,7 @@ class ProposalSnippetController extends Controller
         return [
             'title' => ['required', 'string', 'max:255'],
             'category' => ['nullable', 'string', 'max:100'],
-            'body' => ['required', 'string', 'max:50000'],
+            'body' => ['nullable', 'string', 'max:50000'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
         ];
     }

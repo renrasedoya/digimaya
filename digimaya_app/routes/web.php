@@ -100,6 +100,8 @@ Route::get('/contact', [\App\Http\Controllers\PublicContactController::class, 's
     
 Route::get('/proposal/{token}', [\App\Http\Controllers\Public\ProposalPublicController::class, 'show'])
     ->name('public.proposal.show');
+Route::get('/proposal/{token}/pdf', [\App\Http\Controllers\Public\ProposalPublicController::class, 'downloadPdf'])
+    ->name('public.proposal.pdf');
 
 Route::post('/contact', [\App\Http\Controllers\PublicContactController::class, 'store'])
     ->middleware('throttle:5,60')
@@ -187,6 +189,14 @@ Route::middleware(['auth', 'role', 'prevent.duplicate.admin'])
                 ->parameters(['proposal-snippets' => 'proposalSnippet'])
                 ->except(['show']);
                 
+            Route::post('proposals/upload-image', [\App\Http\Controllers\Admin\ProposalController::class, 'uploadImage'])
+                ->name('proposals.upload-image');
+            Route::get('proposals/{proposal}/preview', [\App\Http\Controllers\Admin\ProposalController::class, 'preview'])
+                ->name('proposals.preview');
+            Route::get('proposals/{proposal}/pdf', [\App\Http\Controllers\Admin\ProposalController::class, 'downloadPdf'])
+                ->name('proposals.pdf');
+            Route::post('proposals/{proposal}/send-email', [\App\Http\Controllers\Admin\ProposalController::class, 'sendEmail'])
+                ->name('proposals.send-email');
             Route::resource('proposals', \App\Http\Controllers\Admin\ProposalController::class)
                 ->except(['show']);
 

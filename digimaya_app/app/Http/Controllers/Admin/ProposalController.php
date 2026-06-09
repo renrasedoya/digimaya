@@ -3,11 +3,19 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\ProposalLinkMail;
 use App\Models\Client;
 use App\Models\Proposal;
 use App\Services\ProposalSnapshotService;
+use App\Services\ProposalTemplateService;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class ProposalController extends Controller
@@ -39,26 +47,32 @@ class ProposalController extends Controller
         return view('admin.proposals.index', compact('proposals', 'counts'));
     }
 
-    public function create(Request $request): View
+    public function create(Request $request, ProposalTemplateService $templates): View
     {
         $clients = $this->prospectClients();
         $preselectClientId = (int) $request->input('client_id', 0);
+        $templateOptions = $templates->options();
 
-        return view('admin.proposals.create', compact('clients', 'preselectClientId'));
+        return view('admin.proposals.create', compact('clients', 'preselectClientId', 'templateOptions'));
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request, ProposalTemplateService $templates): RedirectResponse
     {
-        $validated = $request->validate($this->validationRules());
-        $validated['created_by'] = $request->user()->id;
-        $validated['status'] = Proposal::STATUS_DRAFT;
-        $validated['content_blocks'] = [];
+        $validated = $request->validate($this->validationRules() + [
+            'template' => ['required', 'string', Rule::in(array_keys(ProposalTemplateService::TEMPLATES))],
+        ]);
 
-        $proposal = Proposal::create($validated);
+        $created = Proposal::create([
+            'client_id' => $validated['client_id'],
+            'title' => $validated['title'],
+            'created_by' => $request->user()->id,
+            'status' => Proposal::STATUS_DRAFT,
+            'content_blocks' => $templates->blocksFor($validated['template']),
+        ]);
 
         return redirect()
-            ->route('admin.proposals.edit', $proposal)
-            ->with('success', 'Proposal created. Start adding blocks.');
+            ->route('admin.proposals.edit', $created)
+            ->with('success', 'Proposal dibuat dari template. Hapus section yang tidak perlu, lalu publish.');
     }
 
     public function edit(Proposal $proposal): View
@@ -213,6 +227,93 @@ class ProposalController extends Controller
         return redirect()
             ->route('admin.proposals.index')
             ->with('success', 'Proposal deleted.');
+    }
+
+    /**
+     * Admin preview of the proposal as the client would see it.
+     * Resolves the live draft blocks (no need to publish first).
+     */
+    public function preview(Proposal $proposal, ProposalSnapshotService $snapshot): View
+    {
+        $blocks = $snapshot->resolve($proposal);
+
+        return view('public.proposals.show', [
+            'proposal' => $proposal,
+            'blocks' => $blocks,
+            'preview' => true,
+        ]);
+    }
+
+    /**
+     * Download the proposal as a PDF. Uses the frozen snapshot when published,
+     * otherwise resolves the current draft blocks live.
+     */
+    public function downloadPdf(Proposal $proposal, ProposalSnapshotService $snapshot): Response
+    {
+        $blocks = $this->resolvedBlocks($proposal, $snapshot);
+
+        return $this->buildPdf($proposal, $blocks)->download($this->pdfFilename($proposal));
+    }
+
+    /**
+     * AJAX endpoint for the builder: stores an uploaded image on the public disk
+     * and returns its absolute URL to embed into a custom block.
+     */
+    public function uploadImage(Request $request): JsonResponse
+    {
+        $request->validate([
+            'image' => ['required', 'image', 'mimes:jpg,jpeg,png,webp,gif', 'max:4096'],
+        ]);
+
+        $path = $request->file('image')->store('proposals', 'public');
+
+        return response()->json([
+            'url' => Storage::disk('public')->url($path),
+        ]);
+    }
+
+    /**
+     * Email the public proposal link to the client. Published proposals only.
+     */
+    public function sendEmail(Proposal $proposal): RedirectResponse
+    {
+        if (! $proposal->isPublished()) {
+            return back()->with('error', 'Proposal harus dipublish dulu sebelum dikirim ke klien.');
+        }
+
+        $email = $proposal->client->contact_email ?? null;
+
+        if (empty($email)) {
+            return back()->with('error', 'Klien ini belum punya alamat email. Tambahkan email di data klien dulu.');
+        }
+
+        Mail::to($email)->send(new ProposalLinkMail($proposal));
+
+        return back()->with('success', 'Proposal terkirim ke ' . $email . '.');
+    }
+
+    private function resolvedBlocks(Proposal $proposal, ProposalSnapshotService $snapshot): array
+    {
+        if ($proposal->isPublished() && is_array($proposal->published_content)) {
+            return $proposal->published_content;
+        }
+
+        return $snapshot->resolve($proposal);
+    }
+
+    private function buildPdf(Proposal $proposal, array $blocks)
+    {
+        return Pdf::loadView('admin.proposals.pdf', [
+            'proposal' => $proposal,
+            'blocks' => $blocks,
+        ])->setPaper('a4', 'portrait')->setOption('isRemoteEnabled', true);
+    }
+
+    private function pdfFilename(Proposal $proposal): string
+    {
+        $safe = preg_replace('/[^A-Za-z0-9_.-]+/', '-', $proposal->title ?: 'proposal');
+
+        return 'Proposal-' . trim($safe, '-') . '.pdf';
     }
 
     private function validationRules(): array

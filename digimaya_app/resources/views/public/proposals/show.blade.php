@@ -21,6 +21,17 @@
 </head>
 <body class="bg-neutral-300 py-0 sm:py-10">
 
+    @if(!empty($preview))
+        <div class="sticky top-0 z-50 bg-amber-500 text-white text-center text-sm py-2 px-4">
+            Mode Preview — beginilah tampilan proposal untuk klien. Perubahan terbaru muncul setelah kamu klik Save Draft.
+        </div>
+    @else
+        <a href="{{ route('public.proposal.pdf', $proposal->public_token) }}"
+           class="fixed bottom-5 right-5 z-50 inline-flex items-center px-4 py-2 bg-neutral-900 text-white text-sm rounded-full shadow-lg hover:bg-neutral-700">
+            Unduh PDF
+        </a>
+    @endif
+
     <div class="sheet mx-auto bg-white">
 
         {{-- Cover (full page feel) --}}

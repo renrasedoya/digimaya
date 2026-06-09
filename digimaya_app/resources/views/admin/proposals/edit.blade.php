@@ -24,6 +24,10 @@
                 <div class="mb-4 p-4 bg-green-50 border border-green-200 rounded-md text-green-700">{{ session('success') }}</div>
             @endif
 
+            @if(session('error'))
+                <div class="mb-4 p-4 bg-red-50 border border-red-200 rounded-md text-red-700">{{ session('error') }}</div>
+            @endif
+
             @if($errors->any())
                 <div class="mb-4 p-4 bg-red-50 border border-red-200 rounded-md">
                     <ul class="list-disc list-inside text-sm text-red-700">
@@ -107,12 +111,21 @@
                                             <p class="mt-1 text-xs text-gray-400">Basic HTML allowed (sanitized on save).</p>
                                         </div>
                                         <div>
-                                            <label class="block text-xs font-medium text-gray-600">URL Gambar (opsional)</label>
-                                            <input type="url" x-model="block.image_url" maxlength="1000" placeholder="https://..."
-                                                   class="border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm px-3 py-2 mt-1 block w-full text-sm">
-                                            <p class="mt-1 text-xs text-gray-400">Tempel URL gambar (mis. screenshot tren). Tampil di bawah teks. Upload file menyusul.</p>
+                                            <label class="block text-xs font-medium text-gray-600">Gambar (opsional)</label>
+                                            <div class="mt-1 flex items-center gap-3">
+                                                <input type="file" accept="image/*" @change="uploadImage(block, $event)"
+                                                       class="block text-xs text-gray-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200">
+                                                <span x-show="block._uploading" x-cloak class="text-xs text-gray-400">Mengupload...</span>
+                                            </div>
+                                            <input type="url" x-model="block.image_url" maxlength="1000" placeholder="atau tempel URL https://..."
+                                                   class="border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm px-3 py-2 mt-2 block w-full text-sm">
+                                            <p class="mt-1 text-xs text-gray-400">Upload file dari komputer (maks 4MB), atau tempel URL gambar. Tampil di bawah teks.</p>
                                             <template x-if="block.image_url">
-                                                <img :src="block.image_url" class="mt-2 max-h-32 rounded border border-gray-100" alt="preview">
+                                                <div class="mt-2">
+                                                    <img :src="block.image_url" class="max-h-32 rounded border border-gray-100" alt="preview">
+                                                    <button type="button" @click="block.image_url = ''"
+                                                            class="block mt-1 text-xs text-red-600 hover:text-red-800">Hapus gambar</button>
+                                                </div>
                                             </template>
                                         </div>
                                         <div x-show="block.image_url">
@@ -264,8 +277,13 @@
                 </div>
 
                 {{-- Actions --}}
+                <p class="text-xs text-gray-400 text-right mb-2">Tip: klik Save Draft dulu sebelum Preview atau Download PDF supaya perubahan block terbaru ikut tampil.</p>
                 <div class="flex flex-wrap items-center justify-end gap-3">
                     <a href="{{ route('admin.proposals.index') }}" class="px-4 py-2 text-sm text-gray-600 hover:text-gray-900">Back</a>
+                    <a href="{{ route('admin.proposals.preview', $proposal) }}" target="_blank"
+                       class="px-4 py-2 text-sm border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">Preview</a>
+                    <a href="{{ route('admin.proposals.pdf', $proposal) }}" target="_blank"
+                       class="px-4 py-2 text-sm border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">Download PDF</a>
                     <input type="hidden" name="action" x-ref="actionField" value="save">
                     @if($proposal->isPublished())
                         <button type="submit" @click="$refs.actionField.value = 'unpublish'"
@@ -279,6 +297,40 @@
                     </button>
                 </div>
             </form>
+
+            {{-- Kirim ke Klien (form email dipisah dari form utama agar tidak nested) --}}
+            @if($proposal->isPublished())
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
+                    <div class="p-6 space-y-3">
+                        <h3 class="text-sm font-semibold text-gray-700">Kirim ke Klien</h3>
+                        <div class="flex flex-wrap items-center gap-2">
+                            @php
+                                $waPhone = preg_replace('/[^0-9]/', '', $proposal->client->contact_phone ?? '');
+                                if (str_starts_with($waPhone, '0')) { $waPhone = '62' . substr($waPhone, 1); }
+                                $waText = rawurlencode('Halo, berikut proposal dari Digimaya untuk ' . ($proposal->client->business_name ?? '') . ': ' . route('public.proposal.show', $proposal->public_token));
+                            @endphp
+                            @if($waPhone)
+                                <a href="https://wa.me/{{ $waPhone }}?text={{ $waText }}" target="_blank"
+                                   class="px-3 py-2 text-sm border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 whitespace-nowrap">Kirim via WhatsApp</a>
+                            @else
+                                <span class="px-3 py-2 text-sm text-gray-400">WhatsApp: nomor klien belum diisi</span>
+                            @endif
+
+                            @if(!empty($proposal->client->contact_email))
+                                <form method="POST" action="{{ route('admin.proposals.send-email', $proposal) }}"
+                                      onsubmit="return confirm('Kirim link proposal ke {{ $proposal->client->contact_email }}?')">
+                                    @csrf
+                                    <button type="submit"
+                                            class="px-3 py-2 text-sm border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 whitespace-nowrap">Kirim via Email</button>
+                                </form>
+                            @else
+                                <span class="px-3 py-2 text-sm text-gray-400">Email: alamat klien belum diisi</span>
+                            @endif
+                        </div>
+                        <p class="text-xs text-gray-400">Mengirim tautan publik proposal ke klien. Pastikan isi proposal sudah final dan ter-publish.</p>
+                    </div>
+                </div>
+            @endif
 
         </div>
     </div>
@@ -344,6 +396,34 @@
                     if (found) {
                         block.title = found.title || '';
                         block.body = found.body || '';
+                    }
+                },
+
+                async uploadImage(block, event) {
+                    const file = event.target.files[0];
+                    if (!file) return;
+                    block._uploading = true;
+                    const data = new FormData();
+                    data.append('image', file);
+                    data.append('_token', document.querySelector('input[name=_token]').value);
+                    try {
+                        const res = await fetch('{{ route('admin.proposals.upload-image') }}', {
+                            method: 'POST',
+                            headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' },
+                            body: data,
+                        });
+                        if (!res.ok) {
+                            const err = await res.json().catch(() => ({}));
+                            alert(err.message || 'Upload gagal. Pastikan file gambar dan ukuran di bawah 4MB.');
+                        } else {
+                            const json = await res.json();
+                            block.image_url = json.url;
+                        }
+                    } catch (e) {
+                        alert('Upload gagal. Coba lagi.');
+                    } finally {
+                        block._uploading = false;
+                        event.target.value = '';
                     }
                 },
 
