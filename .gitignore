@@ -1,0 +1,42 @@
+# === Folder yang TIDAK ikut repo ===
+/digimaya_app_node/
+
+# === RAHASIA / KREDENSIAL (wajib, sapu semua varian di mana pun) ===
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+
+# === Dump & backup data (bisa berisi data pelanggan) ===
+/digimaya_app/storage/backups/
+*.sql
+*.sqlite
+*.tar.gz
+
+# === Log ===
+error_log
+*.log
+
+# === Dependensi & artefak berat (penegasan ulang) ===
+/digimaya_app/vendor/
+/digimaya_app/node_modules/
+/digimaya_app/public/build/
+/digimaya_app/tailwindcss-linux-x64
+
+# === File upload pengguna (ditegaskan ulang) ===
+/digimaya.com/storage/*
+!/digimaya.com/storage/.gitignore
+
+# === Backup kode & file sampah ===
+*.bak
+*.bak.*
+*.before
+*.before-rebuild
+
+# === Editor / OS ===
+.DS_Store
+/.idea
+/.vscode
+/.fleet
