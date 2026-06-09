@@ -22,6 +22,11 @@
                 </div>
             </div>
             <div x-data="{}" class="flex items-center gap-2">
+                @if($client->status === 'prospect')
+                    <a href="{{ route('admin.proposals.create', ['client_id' => $client->id]) }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700">
+                        Buat Proposal
+                    </a>
+                @endif
                 <a href="{{ route('admin.clients.edit', $client) }}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700">
                     Edit
                 </a>
