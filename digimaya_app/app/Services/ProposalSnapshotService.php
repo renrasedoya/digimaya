@@ -19,12 +19,19 @@ class ProposalSnapshotService
             $type = $block['type'] ?? null;
 
             if ($type === 'custom' || $type === 'snippet') {
+                $images = is_array($block['images'] ?? null) ? $block['images'] : [];
+                $images = array_values(array_filter(
+                    array_map(fn ($u) => (string) $u, $images),
+                    fn ($u) => $u !== ''
+                ));
+
                 $resolved[] = [
                     'type' => $type,
                     'title' => (string) ($block['title'] ?? ''),
                     'body' => (string) ($block['body'] ?? ''),
                     'image_url' => (string) ($block['image_url'] ?? ''),
                     'caption' => (string) ($block['caption'] ?? ''),
+                    'images' => $images,
                 ];
             } elseif ($type === 'pricing') {
                 $resolved[] = [

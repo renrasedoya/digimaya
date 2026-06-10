@@ -159,6 +159,19 @@
                                                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm px-3 py-2"></textarea>
                                             <p class="mt-1 text-xs text-gray-400">Disalin dari library. Edit bebas, tidak mengubah master snippet.</p>
                                         </div>
+                                        <div x-show="block.images && block.images.length">
+                                            <label class="block text-xs font-medium text-gray-600 mb-1">Gambar dari snippet (<span x-text="(block.images || []).length"></span>)</label>
+                                            <div class="flex flex-wrap gap-2">
+                                                <template x-for="(url, i) in block.images" :key="url">
+                                                    <div class="relative">
+                                                        <img :src="url" class="h-20 w-20 object-cover rounded border border-gray-200" alt="preview">
+                                                        <button type="button" @click="block.images.splice(i, 1)"
+                                                                class="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs leading-none">&times;</button>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                            <p class="mt-1 text-xs text-gray-400">Disalin dari snippet. Hapus yang tak perlu (tidak mengubah master snippet).</p>
+                                        </div>
                                     </div>
 
                                     {{-- Pricing block (stores option only; tiers resolved at render) --}}
@@ -357,7 +370,7 @@
                     if (type === 'custom') {
                         this.blocks.push({ uid: this.newUid(), type: 'custom', title: '', body: '', image_url: '', caption: '' });
                     } else if (type === 'snippet') {
-                        this.blocks.push({ uid: this.newUid(), type: 'snippet', sourceId: '', title: '', body: '' });
+                        this.blocks.push({ uid: this.newUid(), type: 'snippet', sourceId: '', title: '', body: '', images: [] });
                     } else if (type === 'pricing') {
                         this.blocks.push({ uid: this.newUid(), type: 'pricing', heading: '', option: 'all' });
                     } else if (type === 'reference') {
@@ -396,6 +409,8 @@
                     if (found) {
                         block.title = found.title || '';
                         block.body = found.body || '';
+                        // Copy-on-insert: salin array URL gambar dari snippet ke block
+                        block.images = Array.isArray(found.images) ? [...found.images] : [];
                     }
                 },
 

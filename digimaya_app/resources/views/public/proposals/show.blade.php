@@ -93,6 +93,15 @@
                                 @endif
                             </figure>
                         @endif
+                        @if(!empty($block['images']) && is_array($block['images']))
+                            <div class="mt-6 space-y-6">
+                                @foreach($block['images'] as $img)
+                                    <figure>
+                                        <img src="{{ $img }}" alt="" class="w-full rounded">
+                                    </figure>
+                                @endforeach
+                            </div>
+                        @endif
 
                     @elseif($type === 'pricing')
                         @if(!empty($block['rows']))

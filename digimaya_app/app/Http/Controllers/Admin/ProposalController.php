@@ -78,7 +78,7 @@ class ProposalController extends Controller
     public function edit(Proposal $proposal): View
     {
         $clients = $this->prospectClients();
-        $snippets = \App\Models\ProposalSnippet::active()->ordered()->get(['id', 'title', 'body']);
+        $snippets = \App\Models\ProposalSnippet::active()->ordered()->get(['id', 'title', 'body', 'images']);
 
         $lower = \App\Models\PricingTier::where('is_active', true)->where('zone', 'lower')->count();
         $upper = \App\Models\PricingTier::where('is_active', true)->where('zone', 'upper')->count();
@@ -178,13 +178,22 @@ class ProposalController extends Controller
                     'caption' => mb_substr(trim((string) ($block['caption'] ?? '')), 0, 255),
                 ];
             } elseif ($type === 'snippet') {
-                // Copy-on-insert: title + body are stored on the block itself,
+                // Copy-on-insert: title + body + images are stored on the block itself,
                 // fully editable, decoupled from the source snippet record.
+                // Images are URL strings (Bagian A: shared URLs, no physical copy yet).
+                $images = is_array($block['images'] ?? null) ? $block['images'] : [];
+                $images = array_values(array_filter(
+                    array_map(fn ($u) => mb_substr(trim((string) $u), 0, 2000), $images),
+                    fn ($u) => $u !== '' && str_starts_with($u, 'http')
+                ));
+                $images = array_slice($images, 0, 8);
+
                 $clean[] = [
                     'uid' => (string) ($block['uid'] ?? uniqid('b', true)),
                     'type' => 'snippet',
                     'title' => mb_substr(trim((string) ($block['title'] ?? '')), 0, 255),
                     'body' => clean((string) ($block['body'] ?? '')),
+                    'images' => $images,
                 ];
             } elseif ($type === 'pricing') {
                 // Stores only the display choice; tier rows are resolved live at render.

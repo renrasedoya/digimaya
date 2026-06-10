@@ -77,6 +77,13 @@
                         @endif
                     </figure>
                 @endif
+                @if(!empty($block['images']) && is_array($block['images']))
+                    @foreach($block['images'] as $img)
+                        <figure>
+                            <img src="{{ $img }}" alt="" style="max-width:100%;">
+                        </figure>
+                    @endforeach
+                @endif
 
             @elseif($type === 'pricing')
                 @if(!empty($block['rows']))
