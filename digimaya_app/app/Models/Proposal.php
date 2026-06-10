@@ -59,7 +59,7 @@ class Proposal extends Model
     public static function generateUniqueToken(): string
     {
         do {
-            $token = Str::random(40);
+            $token = Str::random(20);
         } while (self::withTrashed()->where('public_token', $token)->exists()); // Bug 1: withTrashed
 
         return $token;
