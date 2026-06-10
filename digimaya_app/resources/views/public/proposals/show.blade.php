@@ -7,8 +7,13 @@
     <title>Proposal — Digimaya</title>
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32.png') }}">
     <link rel="stylesheet" href="{{ asset('css/tailwind.css') }}?v={{ filemtime(public_path('css/tailwind.css')) }}">
+    {{-- Carlito = klon metrik Calibri (gratis). Inter = font default aplikasi (fallback). --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Carlito:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: Georgia, 'Times New Roman', serif; color: #1a1a1a; }
+        /* Calibri (kalau perangkat punya) -> Carlito (klon, dari Google Fonts) -> Inter (default app) -> sistem */
+        body { font-family: Calibri, Carlito, Inter, system-ui, sans-serif; color: #1a1a1a; }
         .doc-body { font-size: 15px; line-height: 1.8; }
         .doc-body p { margin-bottom: 0.9rem; }
         .doc-body ul { list-style: disc; margin-left: 1.4rem; margin-bottom: 0.9rem; }
@@ -20,46 +25,52 @@
         .sheet { width: 100%; max-width: 794px; } /* ~A4 width @96dpi */
     </style>
 </head>
-<body class="bg-neutral-300 py-0 sm:py-10">
+<body class="bg-neutral-100 py-6 sm:py-12 px-4 sm:px-8">
 
     @if(!empty($preview))
         <div class="sticky top-0 z-50 bg-amber-500 text-white text-center text-sm py-2 px-4">
             Mode Preview — beginilah tampilan proposal untuk klien. Perubahan terbaru muncul setelah kamu klik Save Draft.
         </div>
-    @else
-        <a href="{{ route('public.proposal.pdf', $proposal->public_token) }}"
-           class="fixed bottom-5 right-5 z-50 inline-flex items-center px-4 py-2 bg-neutral-900 text-white text-sm rounded-full shadow-lg hover:bg-neutral-700">
-            Unduh PDF
-        </a>
     @endif
 
-    <div class="sheet mx-auto bg-white">
+    <div class="sheet mx-auto bg-white shadow-lg">
 
         {{-- Cover (full page feel) --}}
         <div class="relative overflow-hidden min-h-screen sm:min-h-[1123px] flex flex-col px-12 sm:px-20 py-16 border-b border-neutral-200">
-            {{-- Soft abstract background --}}
+            {{-- Soft brand glow background (sengaja, dua sudut) --}}
             <svg class="absolute inset-0 w-full h-full pointer-events-none" preserveAspectRatio="xMidYMid slice" viewBox="0 0 800 1120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <circle cx="700" cy="120" r="320" fill="#165DFF" opacity="0.05"/>
-                <circle cx="80" cy="900" r="260" fill="#165DFF" opacity="0.04"/>
-                <circle cx="640" cy="980" r="160" fill="#165DFF" opacity="0.06"/>
-                <path d="M0 700 Q400 600 800 760" stroke="#165DFF" stroke-opacity="0.06" stroke-width="2" fill="none"/>
-                <path d="M0 760 Q400 660 800 820" stroke="#165DFF" stroke-opacity="0.04" stroke-width="2" fill="none"/>
+                <defs>
+                    <radialGradient id="coverGlowTop" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" stop-color="#165DFF" stop-opacity="0.13"/>
+                        <stop offset="100%" stop-color="#165DFF" stop-opacity="0"/>
+                    </radialGradient>
+                    <radialGradient id="coverGlowBottom" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" stop-color="#165DFF" stop-opacity="0.07"/>
+                        <stop offset="100%" stop-color="#165DFF" stop-opacity="0"/>
+                    </radialGradient>
+                </defs>
+                <circle cx="770" cy="70" r="380" fill="url(#coverGlowTop)"/>
+                <circle cx="40" cy="1060" r="320" fill="url(#coverGlowBottom)"/>
             </svg>
 
             {{-- Content --}}
             <div class="relative z-10 flex flex-col flex-1">
-                <img src="{{ asset('images/logo/logo-blue.png') }}" alt="Digimaya" class="self-start" style="height:36px;width:auto;max-width:none;object-fit:contain;">
+                <div class="flex items-center justify-between">
+                    <img src="{{ asset('images/logo/logo-blue.png') }}" alt="Digimaya" style="height:36px;width:auto;max-width:none;object-fit:contain;">
+                    <span class="text-xs font-semibold uppercase tracking-widest text-brand">Proposal</span>
+                </div>
                 <div class="flex-1 flex flex-col justify-center">
-                    <div class="w-16 h-px bg-neutral-900 mb-8"></div>
-                    <h1 class="text-4xl sm:text-5xl font-bold leading-tight tracking-tight">{{ $proposal->title }}</h1>
+                    <div class="w-16 h-1 bg-brand rounded-full mb-8"></div>
+                    <h1 class="text-5xl sm:text-6xl font-bold leading-[1.05] tracking-tight">{{ $proposal->title }}</h1>
                     <div class="mt-12">
                         <p class="text-xs uppercase tracking-widest text-neutral-400">Disiapkan untuk</p>
                         <p class="text-2xl mt-1">{{ $proposal->client->business_name ?? '-' }}</p>
                     </div>
                 </div>
-                <div class="text-sm text-neutral-400 space-y-1">
-                    <p>Disiapkan oleh: Digimaya</p>
+                <div class="text-sm text-neutral-500 space-y-1">
+                    <p>Disiapkan oleh <span class="text-neutral-900 font-medium">Digimaya</span></p>
                     <p>{{ $proposal->published_at?->format('d F Y') }}</p>
+                    <p class="text-neutral-400">www.digimaya.com</p>
                 </div>
             </div>
         </div>
@@ -88,7 +99,7 @@
                         <div class="doc-body">{!! $block['body'] ?? '' !!}</div>
                         @if(!empty($block['image_url']))
                             <figure class="mt-6">
-                                <img src="{{ $block['image_url'] }}" alt="{{ $block['caption'] ?? '' }}" class="w-full">
+                                <img src="{{ $block['image_url'] }}" alt="{{ $block['caption'] ?? '' }}" class="max-w-full h-auto">
                                 @if(!empty($block['caption']))
                                     <figcaption class="text-xs text-neutral-400 mt-2 text-center italic">{{ $block['caption'] }}</figcaption>
                                 @endif
@@ -98,7 +109,7 @@
                             <div class="mt-6 space-y-6">
                                 @foreach($block['images'] as $img)
                                     <figure>
-                                        <img src="{{ $img }}" alt="" class="w-full rounded">
+                                        <img src="{{ $img }}" alt="" class="max-w-full h-auto rounded">
                                     </figure>
                                 @endforeach
                             </div>
@@ -158,7 +169,7 @@
                             @foreach($block['items'] ?? [] as $item)
                                 <div>
                                     @if(!empty($item['thumbnail']))
-                                        <img src="{{ $item['thumbnail'] }}" alt="{{ $item['title'] ?? '' }}" class="w-full mb-4">
+                                        <img src="{{ $item['thumbnail'] }}" alt="{{ $item['title'] ?? '' }}" class="max-w-full h-auto mb-4">
                                     @endif
                                     <p class="text-xs uppercase tracking-widest text-neutral-400">{{ $item['industry'] ?? '' }}</p>
                                     <h3 class="text-lg font-bold mt-1">{{ $item['title'] ?? '' }}</h3>
@@ -198,10 +209,29 @@
             @endforelse
         </div>
 
-        {{-- Footer --}}
-        <div class="px-12 sm:px-20 py-10 border-t border-neutral-200 text-center">
-            <img src="{{ asset('images/logo/logo-blue.png') }}" alt="Digimaya" class="h-6 mx-auto opacity-50" style="height:24px;width:auto;max-width:none;object-fit:contain;">
-            <p class="text-xs text-neutral-400 mt-3">Digimaya • Google Ads Agency • {{ now()->year }}</p>
+        {{-- Closing / Back cover (lawannya cover; tanpa background) --}}
+        <div class="min-h-screen sm:min-h-[1123px] flex flex-col px-12 sm:px-20 py-16 border-t border-neutral-200">
+            <div class="flex flex-col flex-1">
+                {{-- spacer atas (cermin posisi logo di cover) --}}
+                <div class="h-9"></div>
+
+                {{-- tengah: Terima Kasih --}}
+                <div class="flex-1 flex flex-col justify-center">
+                    <div class="w-16 h-1 bg-brand rounded-full mb-8"></div>
+                    <h2 class="text-4xl sm:text-5xl font-bold leading-tight tracking-tight">Terima Kasih</h2>
+                    <p class="mt-5 text-lg text-neutral-500 max-w-md">Semoga proposal ini bermanfaat.<br>Kami antusias menantikan kesempatan untuk bekerja sama.</p>
+                </div>
+
+                {{-- bawah: kontak person --}}
+                <div class="text-sm text-neutral-500">
+                    <p class="text-xs uppercase tracking-widest text-neutral-400 mb-3">Kontak</p>
+                    <p class="text-neutral-900 font-semibold">Rica Annisa</p>
+                    <p>085213228692</p>
+                    <p class="mt-3">
+                        <a href="https://www.digimaya.com" target="_blank" rel="noopener" class="text-neutral-700 hover:text-neutral-900">www.digimaya.com</a>
+                    </p>
+                </div>
+            </div>
         </div>
 
     </div>
