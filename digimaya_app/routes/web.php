@@ -198,6 +198,10 @@ Route::middleware(['auth', 'role', 'prevent.duplicate.admin'])
             Route::resource('proposals', \App\Http\Controllers\Admin\ProposalController::class)
                 ->except(['show']);
 
+            Route::resource('proposal-templates', \App\Http\Controllers\Admin\ProposalTemplateController::class)
+                ->only(['index', 'edit', 'update'])
+                ->parameters(['proposal-templates' => 'proposalTemplate']);
+
             Route::resource('incomes', AdminIncomeController::class)->except(['show']);
             Route::resource('expenses', AdminExpenseController::class)->except(['show']);
             Route::post('expenses/{expense}/confirm-recurring', [AdminExpenseController::class, 'confirmRecurring'])->name('expenses.confirm-recurring');
