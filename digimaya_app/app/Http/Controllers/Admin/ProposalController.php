@@ -173,7 +173,7 @@ class ProposalController extends Controller
                     'uid' => (string) ($block['uid'] ?? uniqid('b', true)),
                     'type' => 'custom',
                     'title' => mb_substr(trim((string) ($block['title'] ?? '')), 0, 255),
-                    'body' => clean((string) ($block['body'] ?? '')),
+                    'body' => clean((string) ($block['body'] ?? ''), 'blog'),
                     'image_url' => mb_substr($imageUrl, 0, 1000),
                     'caption' => mb_substr(trim((string) ($block['caption'] ?? '')), 0, 255),
                 ];
@@ -192,7 +192,7 @@ class ProposalController extends Controller
                     'uid' => (string) ($block['uid'] ?? uniqid('b', true)),
                     'type' => 'snippet',
                     'title' => mb_substr(trim((string) ($block['title'] ?? '')), 0, 255),
-                    'body' => clean((string) ($block['body'] ?? '')),
+                    'body' => clean((string) ($block['body'] ?? ''), 'blog'),
                     'images' => $images,
                 ];
             } elseif ($type === 'pricing') {

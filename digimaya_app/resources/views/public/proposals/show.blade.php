@@ -15,6 +15,7 @@
         .doc-body ol { list-style: decimal; margin-left: 1.4rem; margin-bottom: 0.9rem; }
         .doc-body a { color: #165DFF; text-decoration: underline; }
         .doc-body strong { font-weight: 700; }
+        .doc-body h2 { font-weight: 700; font-size: 1.25rem; margin: 1.25rem 0 0.6rem; }
         .doc-body h3 { font-weight: 700; font-size: 1.05rem; margin: 1rem 0 0.5rem; }
         .sheet { width: 100%; max-width: 794px; } /* ~A4 width @96dpi */
     </style>
