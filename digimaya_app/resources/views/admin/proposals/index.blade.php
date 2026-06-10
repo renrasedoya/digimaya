@@ -29,8 +29,8 @@
                                 $currentFilter = request('filter', 'all');
                                 $tabs = [
                                     'all' => 'All (' . $counts['total'] . ')',
-                                    'draft' => 'Draft (' . $counts['draft'] . ')',
                                     'published' => 'Published (' . $counts['published'] . ')',
+                                    'draft' => 'Draft (' . $counts['draft'] . ')',
                                 ];
                             @endphp
                             @foreach($tabs as $key => $label)
@@ -65,7 +65,18 @@
                             <tbody class="bg-white divide-y divide-gray-200">
                                 @foreach($proposals as $proposal)
                                     <tr>
-                                        <td class="px-3 py-2 font-medium">{{ $proposal->title }}</td>
+                                        <td class="px-3 py-2 font-medium">
+                                            <span class="align-middle">{{ $proposal->title }}</span>
+                                            @if($proposal->isPublished())
+                                                <a href="{{ route('public.proposal.show', $proposal->public_token) }}" target="_blank" rel="noopener"
+                                                   title="Open public page" aria-label="Open public page"
+                                                   class="inline-flex align-middle ml-1.5 text-gray-400 hover:text-gray-700">
+                                                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                                    </svg>
+                                                </a>
+                                            @endif
+                                        </td>
                                         <td class="px-3 py-2 text-gray-600 text-sm">{{ $proposal->client->business_name ?? 'Client removed' }}</td>
                                         <td class="px-3 py-2">
                                             @if($proposal->isPublished())
@@ -76,24 +87,6 @@
                                         </td>
                                         <td class="px-3 py-2 text-gray-500 text-sm">{{ $proposal->published_at?->format('d M Y, H:i') ?? '-' }}</td>
                                         <td class="px-3 py-2 text-right whitespace-nowrap">
-                                            @if($proposal->isPublished())
-                                                <a href="{{ route('public.proposal.show', $proposal->public_token) }}" target="_blank" rel="noopener"
-                                                   title="Lihat halaman publik" aria-label="Lihat halaman publik"
-                                                   class="inline-flex align-middle text-gray-500 hover:text-gray-800 mr-2">
-                                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                                    </svg>
-                                                </a>
-                                            @else
-                                                <span title="Belum published (draft)" aria-label="Belum published (draft)"
-                                                      class="inline-flex align-middle text-gray-300 cursor-not-allowed mr-2">
-                                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                                    </svg>
-                                                </span>
-                                            @endif
                                             <a href="{{ route('admin.proposals.edit', $proposal) }}" class="text-indigo-600 hover:text-indigo-900 text-sm">Edit</a>
                                             <form method="POST" action="{{ route('admin.proposals.destroy', $proposal) }}" class="inline" onsubmit="return confirm('Delete this proposal?')">
                                                 @csrf
