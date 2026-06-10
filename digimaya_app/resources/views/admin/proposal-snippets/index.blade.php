@@ -56,9 +56,7 @@
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Title</th>
-                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Category</th>
                                     <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Sort</th>
                                     <th class="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase">Action</th>
                                 </tr>
                             </thead>
@@ -66,7 +64,6 @@
                                 @foreach($snippets as $snippet)
                                     <tr>
                                         <td class="px-3 py-2 font-medium">{{ $snippet->title }}</td>
-                                        <td class="px-3 py-2 text-gray-600 text-sm">{{ $snippet->category ?: '-' }}</td>
                                         <td class="px-3 py-2">
                                             @if($snippet->is_active)
                                                 <span class="inline-flex px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">Active</span>
@@ -74,7 +71,6 @@
                                                 <span class="inline-flex px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-800">Inactive</span>
                                             @endif
                                         </td>
-                                        <td class="px-3 py-2 text-gray-600 text-sm">{{ $snippet->sort_order }}</td>
                                         <td class="px-3 py-2 text-right">
                                             <a href="{{ route('admin.proposal-snippets.edit', $snippet) }}" class="text-indigo-600 hover:text-indigo-900 text-sm">Edit</a>
                                             <form method="POST" action="{{ route('admin.proposal-snippets.destroy', $snippet) }}" class="inline" onsubmit="return confirm('Delete this snippet?')">
