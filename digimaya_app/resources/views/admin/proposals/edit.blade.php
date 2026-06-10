@@ -84,18 +84,44 @@
                         <div class="space-y-3">
                             <template x-for="(block, index) in blocks" :key="block.uid">
                                 <div class="border border-gray-200 rounded-md">
-                                    {{-- Block header --}}
+                                    {{-- Block header (accordion toggle) --}}
                                     <div class="flex items-center justify-between bg-gray-50 px-3 py-2 rounded-t-md">
-                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-500" x-text="blockLabel(block.type)"></span>
-                                        <div class="flex items-center gap-1">
-                                            <button type="button" @click="moveUp(index)" :disabled="index === 0"
-                                                    class="px-2 py-1 text-xs text-gray-600 hover:text-gray-900 disabled:opacity-30 disabled:cursor-not-allowed">Up</button>
-                                            <button type="button" @click="moveDown(index)" :disabled="index === blocks.length - 1"
-                                                    class="px-2 py-1 text-xs text-gray-600 hover:text-gray-900 disabled:opacity-30 disabled:cursor-not-allowed">Down</button>
-                                            <button type="button" @click="removeBlock(index)"
-                                                    class="px-2 py-1 text-xs text-red-600 hover:text-red-900">Remove</button>
+                                        <button type="button" @click="block._open = !block._open"
+                                                class="flex items-center gap-2 text-left flex-1 min-w-0 focus:outline-none">
+                                            <svg class="w-4 h-4 text-gray-400 flex-shrink-0 transition-transform" :class="block._open ? 'rotate-90' : ''"
+                                                 fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                                            </svg>
+                                            <span class="text-xs font-semibold uppercase tracking-wide text-gray-500 flex-shrink-0" x-text="blockLabel(block.type)"></span>
+                                            <span class="text-xs text-gray-400 truncate" x-show="!block._open && blockSummary(block)" x-text="blockSummary(block)"></span>
+                                        </button>
+                                        <div class="flex items-center gap-1 flex-shrink-0">
+                                            <button type="button" @click.stop="moveUp(index)" :disabled="index === 0"
+                                                    title="Naikkan" aria-label="Naikkan"
+                                                    class="p-1.5 text-gray-500 hover:text-gray-900 disabled:opacity-30 disabled:cursor-not-allowed">
+                                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                                                </svg>
+                                            </button>
+                                            <button type="button" @click.stop="moveDown(index)" :disabled="index === blocks.length - 1"
+                                                    title="Turunkan" aria-label="Turunkan"
+                                                    class="p-1.5 text-gray-500 hover:text-gray-900 disabled:opacity-30 disabled:cursor-not-allowed">
+                                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                                                </svg>
+                                            </button>
+                                            <button type="button" @click.stop="removeBlock(index)"
+                                                    title="Hapus" aria-label="Hapus"
+                                                    class="p-1.5 text-red-600 hover:text-red-800">
+                                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3" />
+                                                </svg>
+                                            </button>
                                         </div>
                                     </div>
+
+                                    {{-- Block body (collapsible) --}}
+                                    <div x-show="block._open" x-cloak>
 
                                     {{-- Custom block --}}
                                     <div class="p-3 space-y-3" x-show="block.type === 'custom'">
@@ -237,6 +263,7 @@
                                             </p>
                                         </div>
                                     </div>
+                                    </div>
                                 </div>
                             </template>
                         </div>
@@ -348,6 +375,10 @@
         </div>
     </div>
 
+    @push('styles')
+    <style>[x-cloak]{display:none !important;}</style>
+    @endpush
+
     @push('scripts')
     <script>
         function proposalBuilder(initialBlocks, snippetLibrary, pricingCounts, referenceData) {
@@ -362,19 +393,24 @@
                     return map[type] || type;
                 },
 
+                blockSummary(block) {
+                    if (block.type === 'custom' || block.type === 'snippet') return block.title || '';
+                    return block.heading || '';
+                },
+
                 newUid() {
                     return 'b' + Date.now() + Math.random().toString(36).slice(2, 7);
                 },
 
                 addBlock(type) {
                     if (type === 'custom') {
-                        this.blocks.push({ uid: this.newUid(), type: 'custom', title: '', body: '', image_url: '', caption: '' });
+                        this.blocks.push({ uid: this.newUid(), type: 'custom', title: '', body: '', image_url: '', caption: '', _open: true });
                     } else if (type === 'snippet') {
-                        this.blocks.push({ uid: this.newUid(), type: 'snippet', sourceId: '', title: '', body: '', images: [] });
+                        this.blocks.push({ uid: this.newUid(), type: 'snippet', sourceId: '', title: '', body: '', images: [], _open: true });
                     } else if (type === 'pricing') {
-                        this.blocks.push({ uid: this.newUid(), type: 'pricing', heading: '', option: 'all' });
+                        this.blocks.push({ uid: this.newUid(), type: 'pricing', heading: '', option: 'all', _open: true });
                     } else if (type === 'reference') {
-                        this.blocks.push({ uid: this.newUid(), type: 'reference', heading: '', source: '', ids: [] });
+                        this.blocks.push({ uid: this.newUid(), type: 'reference', heading: '', source: '', ids: [], _open: true });
                     }
                 },
 
