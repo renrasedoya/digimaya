@@ -42,7 +42,7 @@
                     @endif
 
                     <form method="POST" action="{{ route('admin.proposal-snippets.store') }}" class="space-y-6"
-                          x-data="snippetForm({ initialBody: @js(old('body', '')) })" @submit="syncEditorToInput()">
+                          x-data="snippetForm({ initialBody: @js(old('body', '')), initialImages: @js(old('images', [])) })" @submit="syncEditorToInput()">
                         @csrf
 
                         <div>
@@ -52,12 +52,38 @@
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Body</label>
+                            <label class="block text-sm font-medium text-gray-700">Body (optional)</label>
                             {{-- Hidden textarea menerima HTML Quill saat submit; divalidasi server-side --}}
                             <textarea name="body" id="body-input" class="hidden" maxlength="50000">{{ old('body') }}</textarea>
                             {{-- Mount point Quill --}}
                             <div id="quill-editor-body" class="mt-1"></div>
                             <p class="mt-1 text-xs text-gray-500">Gunakan toolbar untuk format (heading, bold, italic, link, list). Disanitasi saat simpan.</p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Image (optional, multiple)</label>
+                            <div class="mt-1 flex items-center gap-3">
+                                <input type="file" multiple accept="image/*" @change="uploadImages($event)"
+                                       :disabled="images.length >= 8"
+                                       class="block text-xs text-gray-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 disabled:opacity-50">
+                                <span x-show="uploading" x-cloak class="text-xs text-gray-400">Mengupload...</span>
+                            </div>
+                            <p class="mt-1 text-xs text-gray-500">Bisa upload beberapa gambar sekaligus, maksimal 4MB per gambar.</p>
+                            <p class="mt-1 text-xs text-gray-400"><span x-text="images.length"></span>/8 gambar.</p>
+                            {{-- hidden inputs untuk submit --}}
+                            <template x-for="url in images" :key="url">
+                                <input type="hidden" name="images[]" :value="url">
+                            </template>
+                            {{-- thumbnail --}}
+                            <div class="mt-2 flex flex-wrap gap-2" x-show="images.length" x-cloak>
+                                <template x-for="(url, i) in images" :key="url">
+                                    <div class="relative">
+                                        <img :src="url" class="h-20 w-20 object-cover rounded border border-gray-200" alt="preview">
+                                        <button type="button" @click="removeImage(i)"
+                                                class="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs leading-none">&times;</button>
+                                    </div>
+                                </template>
+                            </div>
                         </div>
 
                         <div class="flex items-center">
@@ -83,9 +109,45 @@
         function snippetForm(config) {
             return {
                 quill: null,
+                images: Array.isArray(config.initialImages) ? config.initialImages : [],
+                uploading: false,
 
                 init() {
                     this.$nextTick(() => this.initQuill(config.initialBody));
+                },
+
+                async uploadImages(event) {
+                    const files = Array.from(event.target.files || []);
+                    for (const file of files) {
+                        if (this.images.length >= 8) { alert('Maksimal 8 gambar per snippet.'); break; }
+                        this.uploading = true;
+                        const data = new FormData();
+                        data.append('image', file);
+                        data.append('_token', document.querySelector('input[name=_token]').value);
+                        try {
+                            const res = await fetch('{{ route('admin.proposals.upload-image') }}', {
+                                method: 'POST',
+                                headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' },
+                                body: data,
+                            });
+                            if (!res.ok) {
+                                const err = await res.json().catch(() => ({}));
+                                alert(err.message || 'Upload gagal. Pastikan file gambar dan ukuran di bawah 4MB.');
+                            } else {
+                                const json = await res.json();
+                                this.images.push(json.url);
+                            }
+                        } catch (e) {
+                            alert('Upload gagal. Coba lagi.');
+                        } finally {
+                            this.uploading = false;
+                        }
+                    }
+                    event.target.value = '';
+                },
+
+                removeImage(index) {
+                    this.images.splice(index, 1);
                 },
 
                 initQuill(initialContent) {

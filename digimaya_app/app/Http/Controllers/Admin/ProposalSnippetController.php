@@ -47,6 +47,7 @@ class ProposalSnippetController extends Controller
         $validated = $request->validate($this->validationRules());
         $validated['is_active'] = $request->has('is_active');
         $validated['body'] = clean($validated['body'] ?? '', 'blog');
+        $validated['images'] = array_values($request->input('images', []));
 
         ProposalSnippet::create($validated);
 
@@ -65,6 +66,7 @@ class ProposalSnippetController extends Controller
         $validated = $request->validate($this->validationRules());
         $validated['is_active'] = $request->has('is_active');
         $validated['body'] = clean($validated['body'] ?? '', 'blog');
+        $validated['images'] = array_values($request->input('images', []));
 
         $proposalSnippet->update($validated);
 
@@ -88,6 +90,8 @@ class ProposalSnippetController extends Controller
             'title' => ['required', 'string', 'max:255'],
             'category' => ['nullable', 'string', 'max:100'],
             'body' => ['nullable', 'string', 'max:50000'],
+            'images' => ['nullable', 'array', 'max:8'],
+            'images.*' => ['string', 'url', 'max:2000'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
         ];
     }

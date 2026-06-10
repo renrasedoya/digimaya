@@ -13,11 +13,13 @@ class ProposalSnippet extends Model
         'title',
         'category',
         'body',
+        'images',
         'sort_order',
         'is_active',
     ];
 
     protected $casts = [
+        'images' => 'array',
         'sort_order' => 'integer',
         'is_active' => 'boolean',
     ];
