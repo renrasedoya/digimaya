@@ -32,16 +32,14 @@ class ProposalTemplateController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        // Normalise key to a lowercase slug before validating uniqueness.
-        $request->merge(['key' => Str::slug((string) $request->input('key'))]);
-
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'key' => ['required', 'string', 'max:255', 'unique:proposal_templates,key'],
         ]);
 
+        // Key is generated automatically from the name and locked for the lifetime
+        // of the template (update() never changes it).
         $template = ProposalTemplate::create([
-            'key' => $validated['key'],
+            'key' => $this->uniqueKey($validated['name']),
             'name' => $validated['name'],
             'content_blocks' => [],
         ]);
@@ -49,6 +47,24 @@ class ProposalTemplateController extends Controller
         return redirect()
             ->route('admin.proposal-templates.edit', $template)
             ->with('success', 'Template dibuat. Susun block lalu klik Simpan Template.');
+    }
+
+    /**
+     * Build a unique slug key from the template name.
+     * Appends -2, -3, ... when the base slug is already taken.
+     */
+    private function uniqueKey(string $name): string
+    {
+        $base = Str::slug($name) ?: 'template';
+        $key = $base;
+        $i = 2;
+
+        while (ProposalTemplate::where('key', $key)->exists()) {
+            $key = $base . '-' . $i;
+            $i++;
+        }
+
+        return $key;
     }
 
     public function destroy(ProposalTemplate $proposalTemplate): RedirectResponse

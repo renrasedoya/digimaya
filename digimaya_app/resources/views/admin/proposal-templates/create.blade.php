@@ -28,13 +28,7 @@
                             <label for="name" class="block text-sm font-medium text-gray-700">Nama Template <span class="text-red-500">*</span></label>
                             <input type="text" id="name" name="name" value="{{ old('name') }}" required maxlength="255"
                                    class="border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm px-3 py-2 mt-1 block w-full">
-                        </div>
-
-                        <div>
-                            <label for="key" class="block text-sm font-medium text-gray-700">Key <span class="text-red-500">*</span></label>
-                            <input type="text" id="key" name="key" value="{{ old('key') }}" required maxlength="255"
-                                   class="border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm px-3 py-2 mt-1 block w-full">
-                            <p class="mt-1 text-xs text-gray-500">Pengenal unik, otomatis jadi huruf kecil &amp; tanda hubung (mis. "Agency Premium" &rarr; <span class="font-mono">agency-premium</span>). <strong>Tidak bisa diubah</strong> setelah dibuat.</p>
+                            <p class="mt-1 text-xs text-gray-500">Pengenal unik (key) dibuat otomatis dari nama.</p>
                         </div>
 
                         <div class="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200">
