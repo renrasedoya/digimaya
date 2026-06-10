@@ -195,8 +195,6 @@ Route::middleware(['auth', 'role', 'prevent.duplicate.admin'])
                 ->name('proposals.preview');
             Route::get('proposals/{proposal}/pdf', [\App\Http\Controllers\Admin\ProposalController::class, 'downloadPdf'])
                 ->name('proposals.pdf');
-            Route::post('proposals/{proposal}/send-email', [\App\Http\Controllers\Admin\ProposalController::class, 'sendEmail'])
-                ->name('proposals.send-email');
             Route::resource('proposals', \App\Http\Controllers\Admin\ProposalController::class)
                 ->except(['show']);
 

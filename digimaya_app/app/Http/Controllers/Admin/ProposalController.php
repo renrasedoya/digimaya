@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Mail\ProposalLinkMail;
 use App\Models\Client;
 use App\Models\Proposal;
 use App\Services\ProposalSnapshotService;
@@ -13,7 +12,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
@@ -279,26 +277,6 @@ class ProposalController extends Controller
         return response()->json([
             'url' => Storage::disk('public')->url($path),
         ]);
-    }
-
-    /**
-     * Email the public proposal link to the client. Published proposals only.
-     */
-    public function sendEmail(Proposal $proposal): RedirectResponse
-    {
-        if (! $proposal->isPublished()) {
-            return back()->with('error', 'Proposal harus dipublish dulu sebelum dikirim ke klien.');
-        }
-
-        $email = $proposal->client->contact_email ?? null;
-
-        if (empty($email)) {
-            return back()->with('error', 'Klien ini belum punya alamat email. Tambahkan email di data klien dulu.');
-        }
-
-        Mail::to($email)->send(new ProposalLinkMail($proposal));
-
-        return back()->with('success', 'Proposal terkirim ke ' . $email . '.');
     }
 
     private function resolvedBlocks(Proposal $proposal, ProposalSnapshotService $snapshot): array

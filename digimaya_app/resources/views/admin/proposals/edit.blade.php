@@ -317,60 +317,32 @@
                 </div>
 
                 {{-- Actions --}}
-                <p class="text-xs text-gray-400 text-right mb-2">Tip: klik Save Draft dulu sebelum Preview atau Download PDF supaya perubahan block terbaru ikut tampil.</p>
-                <div class="flex flex-wrap items-center justify-end gap-3">
-                    <a href="{{ route('admin.proposals.index') }}" class="px-4 py-2 text-sm text-gray-600 hover:text-gray-900">Back</a>
-                    <a href="{{ route('admin.proposals.preview', $proposal) }}" target="_blank"
-                       class="px-4 py-2 text-sm border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">Preview</a>
-                    <a href="{{ route('admin.proposals.pdf', $proposal) }}" target="_blank"
-                       class="px-4 py-2 text-sm border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">Download PDF</a>
-                    <input type="hidden" name="action" x-ref="actionField" value="save">
-                    @if($proposal->isPublished())
-                        <button type="submit" @click="$refs.actionField.value = 'unpublish'"
-                                class="px-4 py-2 text-sm border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">Unpublish</button>
-                    @endif
-                    <button type="submit" @click="$refs.actionField.value = 'save'"
-                            class="px-4 py-2 border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-50">Save Draft</button>
-                    <button type="submit" @click="$refs.actionField.value = 'publish'"
-                            class="px-4 py-2 bg-brand border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700">
-                        {{ $proposal->isPublished() ? 'Update Published' : 'Publish' }}
-                    </button>
-                </div>
-            </form>
+                <p class="text-xs text-gray-400 mb-2">Tip: klik Save Draft dulu sebelum Preview atau Download PDF supaya perubahan block terbaru ikut tampil.</p>
+                <div class="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 pt-4 border-t border-gray-200">
+                    {{-- Aksi sekunder --}}
+                    <div class="flex flex-wrap items-center gap-2">
+                        <a href="{{ route('admin.proposals.preview', $proposal) }}" target="_blank"
+                           class="px-3 py-2 text-sm border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">Preview</a>
+                        <a href="{{ route('admin.proposals.pdf', $proposal) }}" target="_blank"
+                           class="px-3 py-2 text-sm border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">Download PDF</a>
+                        @if($proposal->isPublished())
+                            <button type="submit" @click="$refs.actionField.value = 'unpublish'"
+                                    class="px-3 py-2 text-sm border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">Unpublish</button>
+                        @endif
+                        <button type="submit" @click="$refs.actionField.value = 'save'"
+                                class="px-3 py-2 text-sm font-semibold border border-green-600 rounded-md text-green-700 hover:bg-green-50 hover:border-green-700">Save Draft</button>
+                    </div>
 
-            {{-- Kirim ke Klien (form email dipisah dari form utama agar tidak nested) --}}
-            @if($proposal->isPublished())
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
-                    <div class="p-6 space-y-3">
-                        <h3 class="text-sm font-semibold text-gray-700">Kirim ke Klien</h3>
-                        <div class="flex flex-wrap items-center gap-2">
-                            @php
-                                $waPhone = preg_replace('/[^0-9]/', '', $proposal->client->contact_phone ?? '');
-                                if (str_starts_with($waPhone, '0')) { $waPhone = '62' . substr($waPhone, 1); }
-                                $waText = rawurlencode('Halo, berikut proposal dari Digimaya untuk ' . ($proposal->client->business_name ?? '') . ': ' . route('public.proposal.show', $proposal->public_token));
-                            @endphp
-                            @if($waPhone)
-                                <a href="https://wa.me/{{ $waPhone }}?text={{ $waText }}" target="_blank"
-                                   class="px-3 py-2 text-sm border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 whitespace-nowrap">Kirim via WhatsApp</a>
-                            @else
-                                <span class="px-3 py-2 text-sm text-gray-400">WhatsApp: nomor klien belum diisi</span>
-                            @endif
-
-                            @if(!empty($proposal->client->contact_email))
-                                <form method="POST" action="{{ route('admin.proposals.send-email', $proposal) }}"
-                                      onsubmit="return confirm('Kirim link proposal ke {{ $proposal->client->contact_email }}?')">
-                                    @csrf
-                                    <button type="submit"
-                                            class="px-3 py-2 text-sm border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 whitespace-nowrap">Kirim via Email</button>
-                                </form>
-                            @else
-                                <span class="px-3 py-2 text-sm text-gray-400">Email: alamat klien belum diisi</span>
-                            @endif
-                        </div>
-                        <p class="text-xs text-gray-400">Mengirim tautan publik proposal ke klien. Pastikan isi proposal sudah final dan ter-publish.</p>
+                    {{-- Aksi utama (menonjol, terpisah di kanan) --}}
+                    <div class="flex items-center">
+                        <input type="hidden" name="action" x-ref="actionField" value="save">
+                        <button type="submit" @click="$refs.actionField.value = 'publish'"
+                                class="px-5 py-2 bg-brand border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 shadow-sm">
+                            {{ $proposal->isPublished() ? 'Update Published' : 'Publish' }}
+                        </button>
                     </div>
                 </div>
-            @endif
+            </form>
 
         </div>
     </div>
