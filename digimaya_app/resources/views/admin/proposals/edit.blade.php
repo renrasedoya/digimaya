@@ -132,9 +132,9 @@
                                         </div>
                                         <div>
                                             <label class="block text-xs font-medium text-gray-600">Content</label>
-                                            <textarea x-model="block.body" rows="6" maxlength="50000"
-                                                      class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm px-3 py-2"></textarea>
-                                            <p class="mt-1 text-xs text-gray-400">Basic HTML allowed (sanitized on save).</p>
+                                            {{-- Mount Quill (lazy-init saat block dibuka; toolbar+editor di dalam wrapper ber-key) --}}
+                                            <div class="mt-1" x-effect="block.type === 'custom' && block._open && $nextTick(() => ensureEditor(block, $el))"></div>
+                                            <p class="mt-1 text-xs text-gray-400">Gunakan toolbar untuk format (heading, bold, italic, link, list). Disanitasi saat simpan.</p>
                                         </div>
                                         <div>
                                             <label class="block text-xs font-medium text-gray-600">Gambar (opsional)</label>
@@ -181,8 +181,8 @@
                                         </div>
                                         <div>
                                             <label class="block text-xs font-medium text-gray-600">Content</label>
-                                            <textarea x-model="block.body" rows="6" maxlength="50000"
-                                                      class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm px-3 py-2"></textarea>
+                                            {{-- Mount Quill (lazy-init saat block dibuka) --}}
+                                            <div class="mt-1" x-effect="block.type === 'snippet' && block._open && $nextTick(() => ensureEditor(block, $el))"></div>
                                             <p class="mt-1 text-xs text-gray-400">Disalin dari library. Edit bebas, tidak mengubah master snippet.</p>
                                         </div>
                                         <div x-show="block.images && block.images.length">
@@ -376,10 +376,28 @@
     </div>
 
     @push('styles')
-    <style>[x-cloak]{display:none !important;}</style>
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
+    <style>
+        [x-cloak]{display:none !important;}
+        .ql-toolbar.ql-snow { border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem; }
+        .ql-container.ql-snow { border-bottom-left-radius: 0.375rem; border-bottom-right-radius: 0.375rem; }
+        .ql-toolbar svg { width: 18px; height: 18px; display: inline-block; }
+        /* Samakan gaya isi dengan konten blog (lihat komponen x-prose-content) */
+        .ql-editor { min-height: 160px; font-size: 1rem; line-height: 1.75; color: #1f2937; }
+        .ql-editor p { margin-bottom: 1.25rem; }
+        .ql-editor h2 { font-size: 1.5rem; font-weight: 700; color: #111827; margin: 2rem 0 1.5rem; line-height: 1.25; }
+        .ql-editor h3 { font-size: 1.25rem; font-weight: 600; color: #111827; margin: 1.5rem 0 1.25rem; line-height: 1.375; }
+        .ql-editor a { color: #165DFF; text-decoration: underline; }
+        .ql-editor strong, .ql-editor b { font-weight: 700; color: #111827; }
+        .ql-editor em, .ql-editor i { font-style: italic; }
+        .ql-editor ul { margin-bottom: 1.25rem; padding-left: 1.5rem; list-style: disc; }
+        .ql-editor ol { margin-bottom: 1.25rem; padding-left: 1.5rem; list-style: decimal; }
+        .ql-editor li { margin-bottom: 0.5rem; }
+    </style>
     @endpush
 
     @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
     <script>
         function proposalBuilder(initialBlocks, snippetLibrary, pricingCounts, referenceData) {
             return {
@@ -387,6 +405,41 @@
                 snippets: Array.isArray(snippetLibrary) ? snippetLibrary : [],
                 pricingCounts: pricingCounts || { all: 0, lower: 0, upper: 0 },
                 referenceData: referenceData || { logo_wall: [], testimonials: [], case_studies: [], services: [] },
+                editors: {},
+
+                editorToolbar() {
+                    return [
+                        [{ header: [2, 3, false] }],
+                        ['bold', 'italic'],
+                        ['link'],
+                        [{ list: 'ordered' }, { list: 'bullet' }],
+                        ['clean'],
+                    ];
+                },
+
+                setEditorHtml(quill, html) {
+                    if (!html) { quill.root.innerHTML = ''; return; }
+                    // Re-inject data-list supaya Quill 2.x render OL/UL dengan benar
+                    const doc = new DOMParser().parseFromString(html, 'text/html');
+                    doc.querySelectorAll('ol > li').forEach(li => li.setAttribute('data-list', 'ordered'));
+                    doc.querySelectorAll('ul > li').forEach(li => li.setAttribute('data-list', 'bullet'));
+                    quill.root.innerHTML = doc.body.innerHTML;
+                },
+
+                ensureEditor(block, el) {
+                    if (!el || this.editors[block.uid]) return; // guard dobel-init
+                    const quill = new Quill(el, {
+                        theme: 'snow',
+                        placeholder: 'Tulis konten di sini...',
+                        modules: { toolbar: this.editorToolbar() },
+                    });
+                    this.setEditorHtml(quill, block.body || '');
+                    quill.on('text-change', () => {
+                        const html = quill.root.innerHTML;
+                        block.body = (html === '<p><br></p>') ? '' : html;
+                    });
+                    this.editors[block.uid] = quill;
+                },
 
                 blockLabel(type) {
                     const map = { custom: 'Custom', snippet: 'Snippet', reference: 'Reference', pricing: 'Pricing' };
@@ -447,6 +500,9 @@
                         block.body = found.body || '';
                         // Copy-on-insert: salin array URL gambar dari snippet ke block
                         block.images = Array.isArray(found.images) ? [...found.images] : [];
+                        // Dorong isi baru ke instance Quill bila editor sudah ada (jangan tampilkan teks lama)
+                        const quill = this.editors[block.uid];
+                        if (quill) this.setEditorHtml(quill, block.body);
                     }
                 },
 
@@ -480,7 +536,9 @@
 
                 removeBlock(index) {
                     if (confirm('Remove this block?')) {
+                        const uid = this.blocks[index] && this.blocks[index].uid;
                         this.blocks.splice(index, 1);
+                        if (uid) delete this.editors[uid];
                     }
                 },
 
