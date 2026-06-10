@@ -44,7 +44,7 @@
 
                     <form method="GET" action="{{ route('admin.proposals.index') }}" class="mb-6 flex gap-2">
                         @if(request('filter'))<input type="hidden" name="filter" value="{{ request('filter') }}">@endif
-                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by title..."
+                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari judul atau klien..."
                                class="flex-1 border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm px-3 py-2">
                         <button type="submit" class="px-4 py-2 bg-gray-800 text-white rounded-md text-sm hover:bg-gray-700">Search</button>
                     </form>
@@ -75,7 +75,25 @@
                                             @endif
                                         </td>
                                         <td class="px-3 py-2 text-gray-500 text-sm">{{ $proposal->published_at?->format('d M Y, H:i') ?? '-' }}</td>
-                                        <td class="px-3 py-2 text-right">
+                                        <td class="px-3 py-2 text-right whitespace-nowrap">
+                                            @if($proposal->isPublished())
+                                                <a href="{{ route('public.proposal.show', $proposal->public_token) }}" target="_blank" rel="noopener"
+                                                   title="Lihat halaman publik" aria-label="Lihat halaman publik"
+                                                   class="inline-flex align-middle text-gray-500 hover:text-gray-800 mr-2">
+                                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                    </svg>
+                                                </a>
+                                            @else
+                                                <span title="Belum published (draft)" aria-label="Belum published (draft)"
+                                                      class="inline-flex align-middle text-gray-300 cursor-not-allowed mr-2">
+                                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                    </svg>
+                                                </span>
+                                            @endif
                                             <a href="{{ route('admin.proposals.edit', $proposal) }}" class="text-indigo-600 hover:text-indigo-900 text-sm">Edit</a>
                                             <form method="POST" action="{{ route('admin.proposals.destroy', $proposal) }}" class="inline" onsubmit="return confirm('Delete this proposal?')">
                                                 @csrf

@@ -32,7 +32,12 @@ class ProposalController extends Controller
         }
 
         if ($search = $request->input('search')) {
-            $query->where('title', 'like', '%' . $search . '%');
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', '%' . $search . '%')
+                    ->orWhereHas('client', function ($c) use ($search) {
+                        $c->where('business_name', 'like', '%' . $search . '%');
+                    });
+            });
         }
 
         $proposals = $query->orderBy('created_at', 'desc')->paginate(15)->withQueryString();
