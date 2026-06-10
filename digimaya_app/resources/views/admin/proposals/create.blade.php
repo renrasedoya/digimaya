@@ -21,24 +21,52 @@
                         </div>
                     @endif
 
-                    @if($clients->isEmpty())
+                    @if($prospectClients->isEmpty() && $activeClients->isEmpty())
                         <div class="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-md text-sm text-yellow-800">
-                            Belum ada Client berstatus Prospect. Proposal cuma bisa dibuat untuk prospect. Promote dulu lead jadi client, atau ubah status client jadi Prospect.
+                            Belum ada Client berstatus Prospect maupun Active. Promote lead jadi client (Prospect), atau aktifkan client dulu.
                         </div>
                     @endif
 
                     <form method="POST" action="{{ route('admin.proposals.store') }}" class="space-y-6">
                         @csrf
 
-                        <div>
-                            <label for="client_id" class="block text-sm font-medium text-gray-700">Client (Prospect) <span class="text-red-500">*</span></label>
-                            <select id="client_id" name="client_id" required
-                                    class="border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm px-3 py-2 mt-1 block w-full">
-                                <option value="">-- Select prospect --</option>
-                                @foreach($clients as $client)
-                                    <option value="{{ $client->id }}" {{ (int) old('client_id', $preselectClientId) === $client->id ? 'selected' : '' }}>{{ $client->business_name }}</option>
-                                @endforeach
-                            </select>
+                        <div x-data="{
+                                type: @js(old('recipient_type', 'prospect')),
+                                clientId: @js((string) old('client_id', $preselectClientId ?: '')),
+                                prospects: @js($prospectClients),
+                                actives: @js($activeClients),
+                                get list() { return this.type === 'active' ? this.actives : this.prospects; },
+                             }" class="space-y-6">
+
+                            {{-- Jenis penerima --}}
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Untuk <span class="text-red-500">*</span></label>
+                                <div class="inline-flex rounded-md border border-gray-300 overflow-hidden">
+                                    <label class="px-4 py-2 text-sm cursor-pointer select-none"
+                                           :class="type === 'prospect' ? 'bg-gray-800 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'">
+                                        <input type="radio" name="recipient_type" value="prospect" x-model="type" @change="clientId = ''" class="sr-only"> Prospect
+                                    </label>
+                                    <label class="px-4 py-2 text-sm cursor-pointer select-none border-l border-gray-300"
+                                           :class="type === 'active' ? 'bg-gray-800 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'">
+                                        <input type="radio" name="recipient_type" value="active" x-model="type" @change="clientId = ''" class="sr-only"> Client (Active)
+                                    </label>
+                                </div>
+                            </div>
+
+                            {{-- Client (opsi menyesuaikan jenis penerima) --}}
+                            <div>
+                                <label for="client_id" class="block text-sm font-medium text-gray-700"><span x-text="type === 'active' ? 'Client' : 'Prospect'">Prospect</span> <span class="text-red-500">*</span></label>
+                                <select id="client_id" name="client_id" required x-model="clientId"
+                                        class="border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm px-3 py-2 mt-1 block w-full">
+                                    <option value="">-- Pilih client --</option>
+                                    <template x-for="c in list" :key="c.id">
+                                        <option :value="String(c.id)" x-text="c.business_name"></option>
+                                    </template>
+                                </select>
+                                <p class="mt-1 text-xs text-gray-500" x-show="list.length === 0" x-cloak>
+                                    Tidak ada client untuk jenis ini. Pilih jenis lain, atau tambah/ubah status client dulu.
+                                </p>
+                            </div>
                         </div>
 
                         <div>
@@ -75,4 +103,8 @@
             </div>
         </div>
     </div>
+
+    @push('styles')
+    <style>[x-cloak]{display:none !important;}</style>
+    @endpush
 </x-app-layout>

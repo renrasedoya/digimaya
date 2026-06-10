@@ -14,6 +14,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class ProposalController extends Controller
@@ -47,16 +48,20 @@ class ProposalController extends Controller
 
     public function create(Request $request): View
     {
-        $clients = $this->prospectClients();
+        $prospectClients = $this->clientsByStatus('prospect');
+        $activeClients = $this->clientsByStatus('active');
         $preselectClientId = (int) $request->input('client_id', 0);
         $templateOptions = ProposalTemplate::orderBy('key')->get(['key', 'name']);
 
-        return view('admin.proposals.create', compact('clients', 'preselectClientId', 'templateOptions'));
+        return view('admin.proposals.create', compact('prospectClients', 'activeClients', 'preselectClientId', 'templateOptions'));
     }
 
     public function store(Request $request): RedirectResponse
     {
-        $validated = $request->validate($this->validationRules() + [
+        $validated = $request->validate([
+            // Recipient may be a prospect OR an active client; other statuses rejected.
+            'client_id' => ['required', Rule::exists('clients', 'id')->whereIn('status', ['prospect', 'active'])],
+            'title' => ['required', 'string', 'max:255'],
             'template' => ['required', 'string', 'exists:proposal_templates,key'],
         ]);
 
@@ -243,7 +248,12 @@ class ProposalController extends Controller
 
     private function prospectClients()
     {
-        return Client::where('status', 'prospect')
+        return $this->clientsByStatus('prospect');
+    }
+
+    private function clientsByStatus(string $status)
+    {
+        return Client::where('status', $status)
             ->orderBy('business_name')
             ->get(['id', 'business_name']);
     }
