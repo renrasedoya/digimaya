@@ -5,16 +5,15 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Client;
 use App\Models\Proposal;
+use App\Models\ProposalTemplate;
 use App\Services\ProposalBlockParser;
 use App\Services\ProposalSnapshotService;
-use App\Services\ProposalTemplateService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class ProposalController extends Controller
@@ -46,32 +45,52 @@ class ProposalController extends Controller
         return view('admin.proposals.index', compact('proposals', 'counts'));
     }
 
-    public function create(Request $request, ProposalTemplateService $templates): View
+    public function create(Request $request): View
     {
         $clients = $this->prospectClients();
         $preselectClientId = (int) $request->input('client_id', 0);
-        $templateOptions = $templates->options();
+        $templateOptions = ProposalTemplate::orderBy('key')->get(['key', 'name']);
 
         return view('admin.proposals.create', compact('clients', 'preselectClientId', 'templateOptions'));
     }
 
-    public function store(Request $request, ProposalTemplateService $templates): RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate($this->validationRules() + [
-            'template' => ['required', 'string', Rule::in(array_keys(ProposalTemplateService::TEMPLATES))],
+            'template' => ['required', 'string', 'exists:proposal_templates,key'],
         ]);
+
+        $template = ProposalTemplate::where('key', $validated['template'])->firstOrFail();
 
         $created = Proposal::create([
             'client_id' => $validated['client_id'],
             'title' => $validated['title'],
             'created_by' => $request->user()->id,
             'status' => Proposal::STATUS_DRAFT,
-            'content_blocks' => $templates->blocksFor($validated['template']),
+            'content_blocks' => $this->copyTemplateBlocks($template->content_blocks),
         ]);
 
         return redirect()
             ->route('admin.proposals.edit', $created)
             ->with('success', 'Proposal dibuat dari template. Hapus section yang tidak perlu, lalu publish.');
+    }
+
+    /**
+     * Deep-copy a template's content_blocks into a fresh proposal, regenerating
+     * each block uid so the proposal's blocks are independent of the template.
+     * Reference ids are copied as-is (frozen), per the agreed design.
+     */
+    private function copyTemplateBlocks(?array $blocks): array
+    {
+        $blocks = is_array($blocks) ? $blocks : [];
+
+        return array_values(array_map(function ($block) {
+            if (is_array($block)) {
+                $block['uid'] = uniqid('b', true);
+            }
+
+            return $block;
+        }, $blocks));
     }
 
     public function edit(Proposal $proposal): View

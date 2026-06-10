@@ -13,6 +13,7 @@ use App\Models\Testimonial;
 use App\Services\ProposalBlockParser;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class ProposalTemplateController extends Controller
@@ -22,6 +23,46 @@ class ProposalTemplateController extends Controller
         $templates = ProposalTemplate::orderBy('key')->get();
 
         return view('admin.proposal-templates.index', compact('templates'));
+    }
+
+    public function create(): View
+    {
+        return view('admin.proposal-templates.create');
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        // Normalise key to a lowercase slug before validating uniqueness.
+        $request->merge(['key' => Str::slug((string) $request->input('key'))]);
+
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'key' => ['required', 'string', 'max:255', 'unique:proposal_templates,key'],
+        ]);
+
+        $template = ProposalTemplate::create([
+            'key' => $validated['key'],
+            'name' => $validated['name'],
+            'content_blocks' => [],
+        ]);
+
+        return redirect()
+            ->route('admin.proposal-templates.edit', $template)
+            ->with('success', 'Template dibuat. Susun block lalu klik Simpan Template.');
+    }
+
+    public function destroy(ProposalTemplate $proposalTemplate): RedirectResponse
+    {
+        // Always keep at least one template so "Buat Proposal" has a source.
+        if (ProposalTemplate::count() <= 1) {
+            return back()->with('error', 'Tidak bisa menghapus: minimal harus ada 1 template untuk "Buat Proposal".');
+        }
+
+        $proposalTemplate->delete();
+
+        return redirect()
+            ->route('admin.proposal-templates.index')
+            ->with('success', 'Template dihapus.');
     }
 
     public function edit(ProposalTemplate $proposalTemplate): View

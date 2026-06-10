@@ -50,13 +50,19 @@
 
                         <div>
                             <label for="template" class="block text-sm font-medium text-gray-700">Template <span class="text-red-500">*</span></label>
-                            <select id="template" name="template" required
-                                    class="border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm px-3 py-2 mt-1 block w-full">
-                                @foreach($templateOptions as $key => $label)
-                                    <option value="{{ $key }}" {{ old('template', 'agency') === $key ? 'selected' : '' }}>{{ $label }}</option>
-                                @endforeach
-                            </select>
-                            <p class="mt-1 text-xs text-gray-500">Proposal akan langsung terisi section default template ini (teks, pricing, reference). Kamu tinggal hapus section yang tidak perlu di langkah berikutnya.</p>
+                            @if($templateOptions->isEmpty())
+                                <div class="mt-1 p-4 bg-yellow-50 border border-yellow-200 rounded-md text-sm text-yellow-800">
+                                    Belum ada template. Buat dulu di menu CRM &rarr; Template Proposal.
+                                </div>
+                            @else
+                                <select id="template" name="template" required
+                                        class="border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm px-3 py-2 mt-1 block w-full">
+                                    @foreach($templateOptions as $tpl)
+                                        <option value="{{ $tpl->key }}" {{ old('template', $templateOptions->first()->key) === $tpl->key ? 'selected' : '' }}>{{ $tpl->name }}</option>
+                                    @endforeach
+                                </select>
+                                <p class="mt-1 text-xs text-gray-500">Proposal akan langsung terisi section dari template ini (teks, pricing, reference). Kamu tinggal hapus section yang tidak perlu di langkah berikutnya.</p>
+                            @endif
                         </div>
 
                         <div class="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200">

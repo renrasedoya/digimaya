@@ -199,7 +199,7 @@ Route::middleware(['auth', 'role', 'prevent.duplicate.admin'])
                 ->except(['show']);
 
             Route::resource('proposal-templates', \App\Http\Controllers\Admin\ProposalTemplateController::class)
-                ->only(['index', 'edit', 'update'])
+                ->only(['index', 'create', 'store', 'edit', 'update', 'destroy'])
                 ->parameters(['proposal-templates' => 'proposalTemplate']);
 
             Route::resource('incomes', AdminIncomeController::class)->except(['show']);
