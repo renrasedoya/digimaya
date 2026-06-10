@@ -62,8 +62,8 @@
                                         <a href="{{ route('admin.crm.overview') }}" class="block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">{{ __('Overview') }}</a>
                                         <a href="{{ route('admin.clients.index') }}" class="block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">{{ __('Clients') }}</a>
                                         <a href="{{ route('admin.proposals.index') }}" class="block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">{{ __('Proposal') }}</a>
-                                        <a href="{{ route('admin.proposal-snippets.index') }}" class="block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">{{ __('Snippet Proposal') }}</a>
-                                        <a href="{{ route('admin.proposal-templates.index') }}" class="block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">{{ __('Template Proposal') }}</a>
+                                        <a href="{{ route('admin.proposal-snippets.index') }}" class="block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">{{ __('Proposal Snippets') }}</a>
+                                        <a href="{{ route('admin.proposal-templates.index') }}" class="block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">{{ __('Proposal Templates') }}</a>
                                     </div>
                                 </div>
                             </div>
@@ -306,10 +306,10 @@
                         {{ __('Proposal') }}
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('admin.proposal-snippets.index')" :active="request()->routeIs('admin.proposal-snippets.*')">
-                        {{ __('Snippet Proposal') }}
+                        {{ __('Proposal Snippets') }}
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('admin.proposal-templates.index')" :active="request()->routeIs('admin.proposal-templates.*')">
-                        {{ __('Template Proposal') }}
+                        {{ __('Proposal Templates') }}
                     </x-responsive-nav-link>
                 @endif
 
