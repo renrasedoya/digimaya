@@ -58,8 +58,15 @@
     @stack('head_schema')
 
     @stack('styles')
+
+    {{-- ============== CUSTOM TRACKING CODE (Settings → Tracking & Custom Code) ============== --}}
+    @php
+        $trackingCode = \App\Models\Setting::group('tracking');
+    @endphp
+    {!! $trackingCode['tracking_code_head'] ?? '' !!}
 </head>
 <body class="bg-white text-gray-900 antialiased font-sans">
+{!! $trackingCode['tracking_code_body_open'] ?? '' !!}
 
 @php
     // Resolve categories for Blog dropdown — used in header on every public page.
@@ -534,5 +541,7 @@
 <style>[x-cloak] { display: none !important; }</style>
 
 @stack('scripts')
+
+{!! $trackingCode['tracking_code_body_close'] ?? '' !!}
 </body>
 </html>

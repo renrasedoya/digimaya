@@ -18,9 +18,10 @@ class SettingController extends Controller
     {
         $company = Setting::group('company');
         $invoice = Setting::group('invoice');
+        $tracking = Setting::group('tracking');
         $bankAccounts = BankAccount::ordered()->get();
 
-        return view('admin.settings.index', compact('company', 'invoice', 'bankAccounts'));
+        return view('admin.settings.index', compact('company', 'invoice', 'tracking', 'bankAccounts'));
     }
 
     /**
@@ -63,6 +64,28 @@ class SettingController extends Controller
         return redirect()
             ->route('admin.settings.index', ['tab' => 'invoice'])
             ->with('success', 'Invoice settings updated.');
+    }
+
+    /**
+     * Update Tracking / Custom Code group (Insert Headers & Footers).
+     *
+     * Raw HTML/JS snippets are stored verbatim and rendered unescaped on public pages,
+     * so this is restricted to super_admin via the route group. No sanitisation is applied
+     * by design — the whole point is to embed third-party scripts (GTM, GA4, pixels).
+     */
+    public function updateTracking(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'tracking_code_head'       => 'nullable|string|max:65535',
+            'tracking_code_body_open'  => 'nullable|string|max:65535',
+            'tracking_code_body_close' => 'nullable|string|max:65535',
+        ]);
+
+        $this->saveGroup($validated);
+
+        return redirect()
+            ->route('admin.settings.index', ['tab' => 'tracking'])
+            ->with('success', 'Tracking & custom code updated.');
     }
 
     /**

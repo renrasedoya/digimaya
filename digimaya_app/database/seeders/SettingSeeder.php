@@ -34,6 +34,11 @@ class SettingSeeder extends Seeder
             ['key' => 'invoice_due_offset_days',  'value' => '14',                            'group' => 'invoice', 'type' => 'integer', 'sort_order' => 2, 'description' => 'Default days from issue date to due date'],
             ['key' => 'invoice_default_tax_rate', 'value' => '0',                             'group' => 'invoice', 'type' => 'decimal', 'sort_order' => 3, 'description' => 'Default tax rate percentage (0 = no tax)'],
             ['key' => 'invoice_footer_notes',     'value' => 'Thank you for your business!', 'group' => 'invoice', 'type' => 'text',    'sort_order' => 4, 'description' => 'Footer notes shown on invoice PDF'],
+
+            // Tracking / Custom Code (Insert Headers & Footers) — injected site-wide on public pages
+            ['key' => 'tracking_code_head',       'value' => '', 'group' => 'tracking', 'type' => 'text', 'sort_order' => 1, 'description' => 'Code injected into <head> on every public page (e.g. GTM, GA4, site verification).'],
+            ['key' => 'tracking_code_body_open',  'value' => '', 'group' => 'tracking', 'type' => 'text', 'sort_order' => 2, 'description' => 'Code injected immediately after the opening <body> tag (e.g. GTM noscript).'],
+            ['key' => 'tracking_code_body_close', 'value' => '', 'group' => 'tracking', 'type' => 'text', 'sort_order' => 3, 'description' => 'Code injected just before the closing </body> tag (e.g. chat widgets, deferred scripts).'],
         ];
 
         foreach ($settings as $setting) {

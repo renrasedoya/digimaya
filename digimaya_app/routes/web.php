@@ -137,6 +137,7 @@ Route::middleware(['auth', 'role', 'prevent.duplicate.admin'])
             Route::get('settings', [AdminSettingController::class, 'index'])->name('settings.index');
             Route::patch('settings/company', [AdminSettingController::class, 'updateCompany'])->name('settings.update.company');
             Route::patch('settings/invoice', [AdminSettingController::class, 'updateInvoice'])->name('settings.update.invoice');
+            Route::patch('settings/tracking', [AdminSettingController::class, 'updateTracking'])->name('settings.update.tracking');
 
             // Bank Accounts (Tier 4.5 R2 - Banking dynamic)
             Route::post('bank-accounts', [AdminBankAccountController::class, 'store'])->name('bank-accounts.store');

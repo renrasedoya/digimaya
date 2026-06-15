@@ -18,9 +18,10 @@
         $activeTab = request('tab', 'company');
         if ($errors->any()) {
             $firstErrorKey = $errors->keys()[0];
-            if (str_starts_with($firstErrorKey, 'company_'))      $activeTab = 'company';
-            elseif (str_starts_with($firstErrorKey, 'bank_'))     $activeTab = 'banking';
-            elseif (str_starts_with($firstErrorKey, 'invoice_')) $activeTab = 'invoice';
+            if (str_starts_with($firstErrorKey, 'company_'))       $activeTab = 'company';
+            elseif (str_starts_with($firstErrorKey, 'bank_'))      $activeTab = 'banking';
+            elseif (str_starts_with($firstErrorKey, 'invoice_'))   $activeTab = 'invoice';
+            elseif (str_starts_with($firstErrorKey, 'tracking_')) $activeTab = 'tracking';
         }
     @endphp
 
@@ -71,6 +72,15 @@
                                     : 'border-l-[3px] border-transparent text-gray-600 hover:bg-gray-50 hover:text-gray-900'"
                                 class="w-full text-left px-4 py-2.5 text-sm transition-colors">
                             Invoice
+                        </button>
+
+                        <button type="button"
+                                @click="activeTab = 'tracking'"
+                                :class="activeTab === 'tracking'
+                                    ? 'bg-blue-50 border-l-[3px] border-[#165DFF] text-[#0C447C] font-semibold'
+                                    : 'border-l-[3px] border-transparent text-gray-600 hover:bg-gray-50 hover:text-gray-900'"
+                                class="w-full text-left px-4 py-2.5 text-sm transition-colors">
+                            Tracking &amp; Custom Code
                         </button>
 
                         <div class="mt-3 pt-3 border-t border-gray-100 px-4 pb-2 text-xs font-medium uppercase tracking-wider text-gray-400">
@@ -417,6 +427,63 @@
                                 <div class="flex items-center justify-end pt-4 border-t border-gray-200">
                                     <button type="submit" class="px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700">
                                         Save Invoice Settings
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        {{-- ========== TRACKING & CUSTOM CODE ========== --}}
+                        <div x-show="activeTab === 'tracking'" x-cloak>
+                            <div class="mb-6">
+                                <h3 class="text-base font-semibold text-gray-900">Tracking &amp; Custom Code</h3>
+                                <p class="text-sm text-gray-500 mt-0.5">Paste scripts (Google Tag Manager, GA4, Meta Pixel, site verification, chat widgets) to inject site-wide on all public pages.</p>
+                            </div>
+
+                            <div class="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-md text-xs text-amber-800">
+                                <strong>Heads up:</strong> code here runs raw on every public page. A broken tag can break the site layout. Paste only trusted snippets and verify after saving.
+                            </div>
+
+                            @if($errors->hasAny(['tracking_code_head', 'tracking_code_body_open', 'tracking_code_body_close']))
+                                <div class="mb-4 p-4 bg-red-50 border border-red-200 rounded-md">
+                                    <ul class="list-disc list-inside text-sm text-red-700">
+                                        @foreach($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+
+                            <form method="POST" action="{{ route('admin.settings.update.tracking') }}" class="space-y-5">
+                                @csrf
+                                @method('PATCH')
+
+                                <div>
+                                    <label for="tracking_code_head" class="block text-sm font-medium text-gray-700">Header Code &mdash; before <code class="text-xs bg-gray-100 px-1 py-0.5 rounded">&lt;/head&gt;</code></label>
+                                    <textarea id="tracking_code_head" name="tracking_code_head" rows="6" spellcheck="false"
+                                              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm font-mono px-3 py-2"
+                                              placeholder="&lt;!-- Google Tag Manager / GA4 / verification meta --&gt;">{{ old('tracking_code_head', $tracking['tracking_code_head'] ?? '') }}</textarea>
+                                    <p class="mt-1 text-xs text-gray-500">Injected inside <code class="bg-gray-100 px-1 rounded">&lt;head&gt;</code>. Use for GTM head snippet, GA4 (gtag.js), and site verification meta tags.</p>
+                                </div>
+
+                                <div>
+                                    <label for="tracking_code_body_open" class="block text-sm font-medium text-gray-700">Body Code &mdash; after <code class="text-xs bg-gray-100 px-1 py-0.5 rounded">&lt;body&gt;</code> opens</label>
+                                    <textarea id="tracking_code_body_open" name="tracking_code_body_open" rows="5" spellcheck="false"
+                                              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm font-mono px-3 py-2"
+                                              placeholder="&lt;!-- Google Tag Manager (noscript) --&gt;">{{ old('tracking_code_body_open', $tracking['tracking_code_body_open'] ?? '') }}</textarea>
+                                    <p class="mt-1 text-xs text-gray-500">Injected immediately after the opening <code class="bg-gray-100 px-1 rounded">&lt;body&gt;</code> tag. Use for the GTM <code class="bg-gray-100 px-1 rounded">&lt;noscript&gt;</code> fallback.</p>
+                                </div>
+
+                                <div>
+                                    <label for="tracking_code_body_close" class="block text-sm font-medium text-gray-700">Footer Code &mdash; before <code class="text-xs bg-gray-100 px-1 py-0.5 rounded">&lt;/body&gt;</code></label>
+                                    <textarea id="tracking_code_body_close" name="tracking_code_body_close" rows="5" spellcheck="false"
+                                              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm font-mono px-3 py-2"
+                                              placeholder="&lt;!-- Chat widget / deferred scripts --&gt;">{{ old('tracking_code_body_close', $tracking['tracking_code_body_close'] ?? '') }}</textarea>
+                                    <p class="mt-1 text-xs text-gray-500">Injected just before the closing <code class="bg-gray-100 px-1 rounded">&lt;/body&gt;</code> tag. Use for chat widgets and non-critical deferred scripts.</p>
+                                </div>
+
+                                <div class="flex items-center justify-end pt-4 border-t border-gray-200">
+                                    <button type="submit" class="px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700">
+                                        Save Tracking &amp; Custom Code
                                     </button>
                                 </div>
                             </form>
