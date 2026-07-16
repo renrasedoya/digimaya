@@ -1,0 +1,37 @@
+---
+deployment:
+  tasks:
+    # Repo menaruh aplikasi di subfolder digimaya_app/, sedangkan di server
+    # aplikasinya ada langsung di ~/digimaya_app. Pemetaannya dilakukan di sini.
+    # $HOME dipakai agar tidak bergantung pada nama user cPanel.
+    - export DEPLOYPATH=$HOME/digimaya_app
+    - export SRC=digimaya_app
+
+    # Backup kode yang sedang live sebelum ditimpa (rollback = kembalikan folder ini).
+    - export STAMP=$(date +%Y%m%d-%H%M%S)
+    - mkdir -p $HOME/deploy_backups/$STAMP
+    - cp -R $DEPLOYPATH/app $HOME/deploy_backups/$STAMP/
+    - cp -R $DEPLOYPATH/resources $HOME/deploy_backups/$STAMP/
+
+    # Salin hanya folder kode. Sengaja TIDAK menyentuh:
+    #   .env      — kredensial produksi, tidak ada di repo
+    #   storage/  — log, cache, sesi, dan file upload milik situs live
+    #   vendor/   — dependensi; jalankan composer install manual bila berubah
+    - cp -R $SRC/app $DEPLOYPATH/
+    - cp -R $SRC/resources $DEPLOYPATH/
+    - cp -R $SRC/routes $DEPLOYPATH/
+    - cp -R $SRC/config $DEPLOYPATH/
+    - cp -R $SRC/database $DEPLOYPATH/
+    - cp -R $SRC/bootstrap $DEPLOYPATH/
+    - cp -R $SRC/public $DEPLOYPATH/
+    - cp $SRC/composer.json $SRC/composer.lock $SRC/artisan $DEPLOYPATH/
+
+    # Hanya bersihkan cache. JANGAN route:cache / config:cache — rebuild-nya
+    # bisa gagal pada closure route dan situs berjalan normal tanpa cache.
+    - cd $DEPLOYPATH && php artisan view:clear
+    - cd $DEPLOYPATH && php artisan route:clear
+    - cd $DEPLOYPATH && php artisan config:clear
+
+    # Migrasi dijalankan terakhir, setelah kode baru terpasang.
+    # Commit saat ini tidak berisi migration, jadi ini no-op.
+    - cd $DEPLOYPATH && php artisan migrate --force
