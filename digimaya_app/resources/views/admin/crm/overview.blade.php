@@ -72,7 +72,13 @@
             {{-- ====================== Row 2: Monthly performance table (12 months) ====================== --}}
             <div class="bg-white rounded-lg shadow p-5">
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-sm font-semibold text-gray-700">Monthly Performance — Last 12 Months</h3>
+                    <h3 class="text-sm font-semibold text-gray-700">
+                        Monthly Performance —
+                        {{ $monthsToShow >= 11 ? 'Last 12 Months' : 'Sejak ' . $trackingStart->format('M Y') }}
+                    </h3>
+                    @if($monthsToShow < 11)
+                        <span class="text-xs text-gray-400">Tracking dimulai {{ $trackingStart->format('F Y') }}</span>
+                    @endif
                 </div>
                 <div class="overflow-x-auto">
                     <table class="min-w-full text-sm">
@@ -170,7 +176,13 @@
                         </tbody>
                     </table>
                 </div>
-                <p class="mt-3 text-xs text-gray-400">Arahkan kursor atau ketuk judul kolom untuk melihat penjelasannya.</p>
+                <p class="mt-3 text-xs text-gray-400">
+                    Arahkan kursor atau ketuk judul kolom untuk melihat penjelasannya.
+                    @if($monthsToShow < 11)
+                        Bulan sebelum {{ $trackingStart->format('M Y') }} tidak ditampilkan karena riwayat statusnya belum tercatat —
+                        bukan berarti tidak ada aktivitas. Client yang sudah ada sebelum itu tidak dihitung sebagai New Active.
+                    @endif
+                </p>
             </div>
 
             {{-- ====================== Row 3: New & Lost Clients (with month filter) ====================== --}}
@@ -252,7 +264,12 @@
                     <ul class="space-y-3">
                         @foreach($recentActivity as $activity)
                             @php
-                                if ($activity->status_to === 'active' && $activity->status_from !== 'active') {
+                                // Creation first: a row with no previous status is a new record,
+                                // not a transition — otherwise it renders as "NULL → something".
+                                if ($activity->status_from === null && $activity->status_to !== 'active') {
+                                    $dotColor = 'bg-gray-400';
+                                    $summary = 'Ditambahkan sebagai ' . str_replace('_', ' ', $activity->status_to);
+                                } elseif ($activity->status_to === 'active' && $activity->status_from !== 'active') {
                                     $dotColor = 'bg-green-500';
                                     $summary = 'Activated';
                                 } elseif ($activity->status_from === 'active' && in_array($activity->status_to, ['inactive', 'churned'], true)) {
@@ -261,15 +278,19 @@
                                 } elseif ($activity->stage_from !== $activity->stage_to) {
                                     $dotColor = 'bg-blue-500';
                                     $summary = 'Stage: '
-                                        . str_replace('_', ' ', $activity->stage_from ?? 'NULL')
+                                        . str_replace('_', ' ', $activity->stage_from ?? '—')
                                         . ' → '
-                                        . str_replace('_', ' ', $activity->stage_to ?? 'NULL');
+                                        . str_replace('_', ' ', $activity->stage_to ?? '—');
+                                } elseif ($activity->status_from === null) {
+                                    // No previous status = the client record was just created.
+                                    $dotColor = 'bg-gray-400';
+                                    $summary = 'Ditambahkan sebagai ' . str_replace('_', ' ', $activity->status_to);
                                 } else {
                                     $dotColor = 'bg-gray-400';
                                     $summary = 'Status: '
-                                        . str_replace('_', ' ', $activity->status_from ?? 'NULL')
+                                        . str_replace('_', ' ', $activity->status_from)
                                         . ' → '
-                                        . str_replace('_', ' ', $activity->status_to ?? 'NULL');
+                                        . str_replace('_', ' ', $activity->status_to ?? '?');
                                 }
                             @endphp
                             <li class="flex items-start gap-3">

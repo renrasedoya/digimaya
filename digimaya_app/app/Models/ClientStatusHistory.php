@@ -85,11 +85,17 @@ class ClientStatusHistory extends Model
 
     /**
      * Exclude synthetic "Backfill ..." history rows seeded for pre-tracking clients.
+     *
+     * The column is table-qualified on purpose: `clients` also has a `notes` column,
+     * so an unqualified `notes` is ambiguous in any query that joins the two.
      */
     public function scopeExcludingBackfill(Builder $query): Builder
     {
-        return $query->where(function (Builder $q) {
-            $q->whereNull('notes')->orWhere('notes', 'NOT LIKE', 'Backfill%');
+        $table = $query->getModel()->getTable();
+
+        return $query->where(function (Builder $q) use ($table) {
+            $q->whereNull("{$table}.notes")
+              ->orWhere("{$table}.notes", 'NOT LIKE', 'Backfill%');
         });
     }
 }

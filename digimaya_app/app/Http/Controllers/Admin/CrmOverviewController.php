@@ -26,17 +26,33 @@ class CrmOverviewController extends Controller
         // ARPA = average MRR per active client (unit economics for sales/finance).
         $arpa = $activeClients > 0 ? $mrr / $activeClients : 0.0;
 
-        // ---- Row 2: Monthly performance table (last 12 months) ----
+        // ---- Row 2: Monthly performance table ----
         // Per-month activations & churn, reused below to build the performance table.
 
-        $trendStart = $now->copy()->subMonths(11)->startOfMonth();
+        // History only exists from the moment tracking began (the backfill import).
+        // Rendering months before that as zeros reads as "no business happened",
+        // which is a lie — there was business, we just have no record of it. So the
+        // table starts at the first recorded event and never claims more than it knows.
+        $firstHistoryAt = ClientStatusHistory::min('changed_at');
+        $trackingStart = $firstHistoryAt
+            ? Carbon::parse($firstHistoryAt)->startOfMonth()
+            : $now->copy()->startOfMonth();
 
+        $monthsToShow = min(11, $trackingStart->diffInMonths($now->copy()->startOfMonth()));
+        $trendStart = $now->copy()->subMonths($monthsToShow)->startOfMonth();
+
+        // Backfill rows are synthetic: one status_to='active' event per pre-existing
+        // client, all stamped with the import date. Counting them as activations would
+        // report the entire existing client book as new business in a single month —
+        // and would blow up the active-base reconstruction below (it goes negative).
+        // They are excluded here and from $rawNewMrr for the same reason.
         $rawActivations = ClientStatusHistory::select(
                 DB::raw('YEAR(changed_at) as y'),
                 DB::raw('MONTH(changed_at) as m'),
                 DB::raw('COUNT(*) as total')
             )
             ->where('status_to', 'active')
+            ->excludingBackfill()
             ->where('changed_at', '>=', $trendStart)
             ->groupBy('y', 'm')
             ->get()
@@ -94,6 +110,7 @@ class CrmOverviewController extends Controller
         $rawNewMrr = ClientStatusHistory::query()
             ->join('clients', 'clients.id', '=', 'client_status_history.client_id')
             ->where('client_status_history.status_to', 'active')
+            ->excludingBackfill()
             ->where('client_status_history.changed_at', '>=', $trendStart)
             ->select($mrrSelect)
             ->groupBy('y', 'm')
@@ -111,15 +128,17 @@ class CrmOverviewController extends Controller
             ->keyBy($keyByYm);
 
         // Reconstruct the active client base at the start of each month by walking
-        // backward from the current active count. Every status_to='active' event is +1
-        // active; every status_from='active' event (→inactive/churned) is −1. So:
+        // backward from the current active count. Every real status_to='active' event is
+        // +1 active; every status_from='active' event (→inactive/churned) is −1. So:
         //   active_start(M) = active_end(M) − activations(M) + deactivations(M)
-        // and active_end(M) = active_start(M+1). activations/deactivations include backfill
-        // rows so the reconstruction reconciles with the live active count.
+        // and active_end(M) = active_start(M+1).
+        //
+        // Backfilled clients are excluded from activations, which correctly treats them
+        // as already-active at the start of the import month rather than as new business.
         $monthlyPerformance = [];
         $runningActiveEnd = $activeClients; // active "now" = end of the current month so far
 
-        for ($i = 0; $i <= 11; $i++) {
+        for ($i = 0; $i <= $monthsToShow; $i++) {
             $month = $now->copy()->subMonths($i);
             $key = $month->format('Y-m');
 
@@ -238,6 +257,8 @@ class CrmOverviewController extends Controller
             'mrr',
             'arpa',
             'monthlyPerformance',
+            'trackingStart',
+            'monthsToShow',
             'newClientsList',
             'lostClientsList',
             'selectedMonth',
