@@ -74,10 +74,12 @@
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-sm font-semibold text-gray-700">
                         Monthly Performance —
-                        {{ $monthsToShow >= 11 ? 'Last 12 Months' : 'Sejak ' . $trackingStart->format('M Y') }}
+                        {{ count($monthlyPerformance) >= 12 ? 'Last 12 Months' : 'Sejak ' . $historyFrom->format('M Y') }}
                     </h3>
-                    @if($monthsToShow < 11)
-                        <span class="text-xs text-gray-400">Tracking dimulai {{ $trackingStart->format('F Y') }}</span>
+                    @if(count($monthlyPerformance) < 12)
+                        <span class="text-xs text-gray-400">
+                            {{ count($monthlyPerformance) }} bulan riwayat tersedia
+                        </span>
                     @endif
                 </div>
                 <div class="overflow-x-auto">
@@ -178,9 +180,9 @@
                 </div>
                 <p class="mt-3 text-xs text-gray-400">
                     Arahkan kursor atau ketuk judul kolom untuk melihat penjelasannya.
-                    @if($monthsToShow < 11)
-                        Bulan sebelum {{ $trackingStart->format('M Y') }} tidak ditampilkan karena riwayat statusnya belum tercatat —
-                        bukan berarti tidak ada aktivitas. Client yang sudah ada sebelum itu tidak dihitung sebagai New Active.
+                    @if(count($monthlyPerformance) < 12)
+                        Bulan sebelum {{ $historyFrom->format('M Y') }} tidak ditampilkan: riwayatnya tidak bisa direkonstruksi
+                        karena data client baru dimasukkan ke CRM saat itu, bukan karena tidak ada aktivitas.
                     @endif
                 </p>
             </div>
