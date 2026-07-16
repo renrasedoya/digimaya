@@ -6,7 +6,10 @@
 #
 # Kredensial dibaca dari ~/.digimaya-ftp, isinya SATU baris: username:password
 # File itu tidak pernah masuk repo. Buat dengan:
-#   printf 'user@digimaya.com:PASSWORD' > ~/.digimaya-ftp && chmod 600 ~/.digimaya-ftp
+#   printf '%s' 'user@digimaya.com:PASSWORD' > ~/.digimaya-ftp && chmod 600 ~/.digimaya-ftp
+#
+# Perhatikan '%s' di atas — WAJIB. Tanpa itu printf menelan tanda % di dalam
+# password ("%J: invalid directive") dan menulis file yang rusak.
 #
 # CATATAN PENTING soal host: sertifikat TLS server diterbitkan untuk
 # alezio.id.rapidplex.com, BUKAN ftp.renrasedoya.com. Memakai nama yang salah
