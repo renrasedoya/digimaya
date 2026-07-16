@@ -14,32 +14,39 @@
             {{-- ====================== Row 1: Lifecycle metrics (4 cards) ====================== --}}
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
-                {{-- Total Clients --}}
+                {{-- ARPA --}}
                 <div class="bg-white rounded-lg shadow p-5">
-                    <div class="text-sm font-medium text-gray-500">Total Clients</div>
-                    <div class="mt-2 text-3xl font-bold text-gray-900">{{ number_format($totalClients) }}</div>
-                    <div class="mt-1 text-xs text-gray-500">All clients in system</div>
+                    <div class="text-sm font-medium text-gray-500">
+                        <x-col-tip label="ARPA" align="left">ARPA (Average Revenue Per Account) = MRR ÷ jumlah client aktif. Rata-rata pendapatan bulanan dari tiap client aktif. Makin tinggi, makin besar nilai rata-rata per client.</x-col-tip>
+                    </div>
+                    <div class="mt-2 text-3xl font-bold text-gray-900">Rp{{ number_format($arpa, 0, ',', '.') }}</div>
+                    <div class="mt-1 text-xs text-gray-500">Rata-rata MRR per client aktif</div>
                 </div>
 
                 {{-- Active Clients --}}
                 <div class="bg-white rounded-lg shadow p-5">
-                    <div class="text-sm font-medium text-gray-500">Active Clients</div>
+                    <div class="text-sm font-medium text-gray-500">
+                        <x-col-tip label="Active Clients" align="left">Jumlah client yang sedang aktif (berlangganan). Persentase dihitung dari total client riil (aktif + inactive + churned), tanpa menghitung prospek.</x-col-tip>
+                    </div>
                     <div class="mt-2 text-3xl font-bold text-gray-900">{{ number_format($activeClients) }}</div>
                     <div class="mt-1 text-xs text-gray-500">
-                        {{ $activeClients }} of {{ $totalClients }} total
-                        @if($totalClients > 0)
-                            ({{ round(($activeClients / $totalClients) * 100) }}%)
+                        {{ $activeClients }} dari {{ $realClients }} client
+                        @if($realClients > 0)
+                            ({{ round(($activeClients / $realClients) * 100) }}%)
                         @endif
+                        <span class="text-gray-400">· tanpa prospek</span>
                     </div>
                 </div>
 
                 {{-- MRR --}}
                 <div class="bg-white rounded-lg shadow p-5">
-                    <div class="text-sm font-medium text-gray-500">MRR (Active)</div>
+                    <div class="text-sm font-medium text-gray-500">
+                        <x-col-tip label="MRR (Active)" align="left">MRR (Monthly Recurring Revenue) = total retainer bulanan dari semua client aktif. Pendapatan berulang yang masuk tiap bulan.</x-col-tip>
+                    </div>
                     <div class="mt-2 text-3xl font-bold text-gray-900">
                         Rp{{ number_format($mrr, 0, ',', '.') }}
                     </div>
-                    <div class="mt-1 text-xs text-gray-500">Sum of monthly retainers</div>
+                    <div class="mt-1 text-xs text-gray-500">Total retainer bulanan client aktif</div>
                 </div>
 
                 {{-- Prospects (action card) --}}
@@ -53,90 +60,123 @@
                         {{ number_format($totalProspects) }}
                     </div>
                     <div class="mt-1 text-xs text-gray-500">
-                        {{ $freshProspects }} in last 30d · {{ $agedProspects }} older
+                        {{ $freshProspects }} dalam 30 hari · {{ $agedProspects }} lebih lama
                         @if($agedProspectsNeedFu > 0)
-                            · <span class="text-yellow-700 font-medium">{{ $agedProspectsNeedFu }} need FU</span>
+                            · <span class="text-yellow-700 font-medium">{{ $agedProspectsNeedFu }} perlu FU</span>
                         @endif
                     </div>
                 </a>
 
             </div>
 
-            {{-- ====================== Row 2: This-month flow metrics (2 cards) ====================== --}}
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
-                {{-- New Active This Month --}}
-                <div class="bg-white rounded-lg shadow p-5">
-                    <div class="flex items-center gap-2">
-                        <span class="inline-block w-2 h-2 rounded-full bg-green-500"></span>
-                        <div class="text-sm font-medium text-gray-500">New Active This Month</div>
-                    </div>
-                    <div class="mt-2 text-3xl font-bold text-gray-900">{{ number_format($newActiveThisMonth) }}</div>
-                    <div class="mt-1 text-xs flex items-center gap-1
-                        @if($newActiveDelta > 0) text-green-600
-                        @elseif($newActiveDelta < 0) text-red-600
-                        @else text-gray-500
-                        @endif">
-                        @if($newActiveDelta > 0)
-                            <span>&#9650;</span>
-                            <span>+{{ $newActiveDelta }} vs last month</span>
-                        @elseif($newActiveDelta < 0)
-                            <span>&#9660;</span>
-                            <span>{{ $newActiveDelta }} vs last month</span>
-                        @else
-                            <span>No change vs last month</span>
-                        @endif
-                    </div>
-                </div>
-
-                {{-- Lost This Month --}}
-                <div class="bg-white rounded-lg shadow p-5">
-                    <div class="flex items-center gap-2">
-                        <span class="inline-block w-2 h-2 rounded-full bg-red-500"></span>
-                        <div class="text-sm font-medium text-gray-500">Lost This Month</div>
-                    </div>
-                    <div class="mt-2 text-3xl font-bold text-gray-900">{{ number_format($lostThisMonth) }}</div>
-                    <div class="mt-1 text-xs flex items-center gap-1
-                        @if($lostDelta > 0) text-red-600
-                        @elseif($lostDelta < 0) text-green-600
-                        @else text-gray-500
-                        @endif">
-                        @if($lostDelta > 0)
-                            <span>&#9650;</span>
-                            <span>+{{ $lostDelta }} vs last month</span>
-                        @elseif($lostDelta < 0)
-                            <span>&#9660;</span>
-                            <span>{{ $lostDelta }} vs last month</span>
-                        @else
-                            <span>No change vs last month</span>
-                        @endif
-                    </div>
-                </div>
-
-            </div>
-
-            {{-- ====================== Row 3: Trend chart (full width) ====================== --}}
+            {{-- ====================== Row 2: Monthly performance table (12 months) ====================== --}}
             <div class="bg-white rounded-lg shadow p-5">
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-sm font-semibold text-gray-700">Activation vs Lost — Last 12 Months</h3>
-                    <div class="flex items-center gap-4 text-xs text-gray-500">
-                        <span class="flex items-center gap-1">
-                            <span class="inline-block w-3 h-3 rounded-sm bg-green-500"></span> New Active
-                        </span>
-                        <span class="flex items-center gap-1">
-                            <span class="inline-block w-3 h-3 rounded-sm bg-red-500"></span> Lost
-                        </span>
-                    </div>
+                    <h3 class="text-sm font-semibold text-gray-700">Monthly Performance — Last 12 Months</h3>
                 </div>
-                <div style="position: relative; height: 280px;">
-                    <canvas id="crmTrendChart"></canvas>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full text-sm">
+                        <thead>
+                            <tr class="text-xs uppercase tracking-wide text-gray-500 border-b border-gray-200">
+                                <th class="text-left font-semibold py-2 pr-4">Month</th>
+                                <th class="text-right font-semibold py-2 px-3">
+                                    <x-col-tip label="New Active" align="left">Semua client yang menjadi aktif bulan ini — dari sumber mana pun: prospek yang closing, reaktivasi, dan win-back client lama.</x-col-tip>
+                                </th>
+                                <th class="text-right font-semibold py-2 px-3">
+                                    <x-col-tip label="Churned" align="left">Client aktif yang berhenti bulan ini (menjadi inactive atau churned).</x-col-tip>
+                                </th>
+                                <th class="text-right font-semibold py-2 px-3">
+                                    <x-col-tip label="Net" align="left">New Active dikurangi Churned — pertumbuhan bersih jumlah client aktif.</x-col-tip>
+                                </th>
+                                <th class="text-right font-semibold py-2 px-3">
+                                    <x-col-tip label="Won">Prospek yang berhasil menjadi client aktif (prospect → active). Bagian dari New Active.</x-col-tip>
+                                </th>
+                                <th class="text-right font-semibold py-2 px-3">
+                                    <x-col-tip label="Lost">Prospek yang gagal closing (prospect → lost). Berbeda dengan churn client.</x-col-tip>
+                                </th>
+                                <th class="text-right font-semibold py-2 px-3">
+                                    <x-col-tip label="Win %">Won ÷ (Won + Lost) yang diputuskan bulan ini — tingkat kemenangan prospek. Tampil “—” bila tidak ada prospek yang diputuskan.</x-col-tip>
+                                </th>
+                                <th class="text-right font-semibold py-2 px-3">
+                                    <x-col-tip label="Churn %">Churned ÷ jumlah client aktif di awal bulan — tingkat kehilangan client bulanan. Tampil “—” bila tidak ada client aktif.</x-col-tip>
+                                </th>
+                                <th class="text-right font-semibold py-2 px-3" style="border-left: 1px solid #f3f4f6;">
+                                    <x-col-tip label="New MRR">Total retainer bulanan dari client yang menjadi aktif bulan ini.</x-col-tip>
+                                </th>
+                                <th class="text-right font-semibold py-2 px-3">
+                                    <x-col-tip label="Churned MRR">Total retainer bulanan yang hilang dari client yang churn bulan ini.</x-col-tip>
+                                </th>
+                                <th class="text-right font-semibold py-2 pl-3">
+                                    <x-col-tip label="Net MRR">New MRR dikurangi Churned MRR — perubahan bersih pendapatan bulanan berulang (MRR).</x-col-tip>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            @foreach($monthlyPerformance as $row)
+                                <tr class="text-gray-700 hover:bg-gray-50 {{ $row['isCurrent'] ? 'bg-gray-50' : '' }}">
+                                    <td class="py-2 pr-4 font-medium text-gray-900 whitespace-nowrap">
+                                        {{ $row['label'] }}
+                                        @if($row['isCurrent'])
+                                            <span class="font-normal text-gray-400" style="font-size: 10px;">(so far)</span>
+                                        @endif
+                                    </td>
+                                    <td class="py-2 px-3 text-right tabular-nums">{{ $row['newActive'] }}</td>
+                                    <td class="py-2 px-3 text-right tabular-nums">{{ $row['churned'] }}</td>
+                                    <td class="py-2 px-3 text-right tabular-nums font-medium
+                                        @if($row['net'] > 0) text-green-600
+                                        @elseif($row['net'] < 0) text-red-600
+                                        @else text-gray-400 @endif">
+                                        {{ $row['net'] > 0 ? '+' : '' }}{{ $row['net'] }}
+                                    </td>
+                                    <td class="py-2 px-3 text-right tabular-nums">{{ $row['won'] }}</td>
+                                    <td class="py-2 px-3 text-right tabular-nums">{{ $row['lostProsp'] }}</td>
+                                    <td class="py-2 px-3 text-right tabular-nums">
+                                        @if(is_null($row['winRate']))
+                                            <span class="text-gray-300">—</span>
+                                        @else
+                                            {{ $row['winRate'] }}%
+                                        @endif
+                                    </td>
+                                    <td class="py-2 px-3 text-right tabular-nums">
+                                        @if(is_null($row['churnRate']))
+                                            <span class="text-gray-300">—</span>
+                                        @else
+                                            <span class="{{ $row['churnRate'] > 0 ? 'text-red-600' : 'text-gray-500' }}">{{ rtrim(rtrim(number_format($row['churnRate'], 1), '0'), '.') }}%</span>
+                                        @endif
+                                    </td>
+                                    <td class="py-2 px-3 text-right tabular-nums whitespace-nowrap" style="border-left: 1px solid #f3f4f6;">
+                                        @if(is_null($row['newMrrFmt']))
+                                            <span class="text-gray-300">—</span>
+                                        @else
+                                            {{ $row['newMrrFmt'] }}
+                                        @endif
+                                    </td>
+                                    <td class="py-2 px-3 text-right tabular-nums whitespace-nowrap">
+                                        @if(is_null($row['churnedMrrFmt']))
+                                            <span class="text-gray-300">—</span>
+                                        @else
+                                            {{ $row['churnedMrrFmt'] }}
+                                        @endif
+                                    </td>
+                                    <td class="py-2 pl-3 text-right tabular-nums whitespace-nowrap font-medium">
+                                        @if(is_null($row['netMrrFmt']))
+                                            <span class="text-gray-300">—</span>
+                                        @else
+                                            <span class="{{ $row['netMrr'] > 0 ? 'text-green-600' : ($row['netMrr'] < 0 ? 'text-red-600' : 'text-gray-400') }}">{{ $row['netMrrFmt'] }}</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
+                <p class="mt-3 text-xs text-gray-400">Arahkan kursor atau ketuk judul kolom untuk melihat penjelasannya.</p>
             </div>
 
-            {{-- ====================== Row 4: New & Lost Clients (with month filter) ====================== --}}
+            {{-- ====================== Row 3: New & Lost Clients (with month filter) ====================== --}}
             <div class="bg-white rounded-lg shadow p-5">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
-                    <h3 class="text-sm font-semibold text-gray-700">New &amp; Lost Clients</h3>
+                    <h3 class="text-sm font-semibold text-gray-700">New &amp; Churned Clients</h3>
                     <form method="GET" action="{{ route('admin.crm.overview') }}" class="flex items-center gap-2">
                         <label for="month-filter" class="text-xs text-gray-500">Month:</label>
                         <select
@@ -183,11 +223,11 @@
                         <div class="flex items-center gap-2 mb-3">
                             <span class="inline-block w-2 h-2 rounded-full bg-red-500"></span>
                             <h4 class="text-xs font-semibold text-gray-600 uppercase tracking-wide">
-                                Lost ({{ $lostClientsList->count() }})
+                                Churned ({{ $lostClientsList->count() }})
                             </h4>
                         </div>
                         @if($lostClientsList->isEmpty())
-                            <p class="text-xs text-gray-400">No lost clients in this month.</p>
+                            <p class="text-xs text-gray-400">No churned clients in this month.</p>
                         @else
                             <ul class="space-y-2">
                                 @foreach($lostClientsList as $entry)
@@ -203,7 +243,7 @@
                 </div>
             </div>
 
-            {{-- ====================== Row 5: Recent Activity ====================== --}}
+            {{-- ====================== Row 4: Recent Activity ====================== --}}
             <div class="bg-white rounded-lg shadow p-5">
                 <h3 class="text-sm font-semibold text-gray-700 mb-4">Recent Activity</h3>
                 @if($recentActivity->isEmpty())
@@ -215,9 +255,9 @@
                                 if ($activity->status_to === 'active' && $activity->status_from !== 'active') {
                                     $dotColor = 'bg-green-500';
                                     $summary = 'Activated';
-                                } elseif ($activity->status_to === 'inactive' && $activity->status_from === 'active') {
+                                } elseif ($activity->status_from === 'active' && in_array($activity->status_to, ['inactive', 'churned'], true)) {
                                     $dotColor = 'bg-red-500';
-                                    $summary = 'Lost';
+                                    $summary = 'Churned';
                                 } elseif ($activity->stage_from !== $activity->stage_to) {
                                     $dotColor = 'bg-blue-500';
                                     $summary = 'Stage: '
@@ -252,61 +292,4 @@
 
         </div>
     </div>
-
-    @push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const ctx = document.getElementById('crmTrendChart');
-            if (!ctx) return;
-
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: @json($trendLabels),
-                    datasets: [
-                        {
-                            label: 'New Active',
-                            data: @json($trendActivations),
-                            backgroundColor: '#22c55e',
-                            borderRadius: 4,
-                        },
-                        {
-                            label: 'Lost',
-                            data: @json($trendLosses),
-                            backgroundColor: '#ef4444',
-                            borderRadius: 4,
-                        }
-                    ],
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            callbacks: {
-                                label: function (ctx) {
-                                    const label = ctx.dataset.label;
-                                    const v = ctx.parsed.y;
-                                    return label + ': ' + v + (v !== 1 ? ' clients' : ' client');
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: { precision: 0 },
-                            grid: { color: '#f3f4f6' },
-                        },
-                        x: {
-                            grid: { display: false },
-                        }
-                    }
-                }
-            });
-        });
-    </script>
-    @endpush
 </x-app-layout>
