@@ -28,11 +28,16 @@ cd "$(dirname "$0")"
 [ -f "$CREDFILE" ] || { echo "ERROR: $CREDFILE tidak ada. Lihat komentar di atas."; exit 1; }
 CRED="$(tr -d '\n' < "$CREDFILE")"
 
-# Tentukan daftar file
+# Tentukan daftar file.
+# Catatan: pakai while-read, bukan mapfile — macOS masih bash 3.2 dan mapfile
+# baru ada di bash 4.
 if [ $# -gt 0 ]; then
     FILES=("$@")
 else
-    mapfile -t FILES < <(git diff --name-only HEAD~1 HEAD -- "$APPDIR" | sed "s|^$APPDIR/||")
+    FILES=()
+    while IFS= read -r line; do
+        [ -n "$line" ] && FILES+=("$line")
+    done < <(git diff --name-only HEAD~1 HEAD -- "$APPDIR" | sed "s|^$APPDIR/||")
     [ ${#FILES[@]} -eq 0 ] && { echo "Tidak ada file berubah di commit terakhir."; exit 0; }
 fi
 
@@ -45,13 +50,18 @@ for f in "${FILES[@]}"; do
     local_path="$APPDIR/$f"
     [ -f "$local_path" ] || { echo "LEWAT  : $f (tidak ada di lokal)"; continue; }
 
-    # Percobaan sampai 3x: server kadang menolak dengan 451 secara acak dan
-    # meninggalkan file 0 byte. Ukuran diverifikasi setelah tiap percobaan.
+    # Percobaan sampai 3x, dan ukuran diverifikasi setelah tiap percobaan: upload
+    # yang gagal meninggalkan file 0 BYTE di server, bukan file lama yang utuh.
+    # Diam-diam gagal = halaman mati.
+    #
+    # --disable-epsv di atas itu WAJIB, bukan hiasan: dengan EPSV (default curl),
+    # server ini memutus koneksi data untuk file di atas ~15 KB dengan
+    # "451 Error during read from data connection". PASV biasa jalan normal.
     want=$(wc -c < "$local_path" | tr -d ' ')
     sent=0
     for attempt in 1 2 3; do
-        if curl -s --ssl-reqd --max-time 90 -u "$CRED" -T "$local_path" "$HOST/$REMOTE_ROOT/$f" 2>/dev/null; then
-            got=$(curl -s --ssl-reqd --max-time 30 -u "$CRED" "$HOST/$REMOTE_ROOT/$(dirname "$f")/" 2>/dev/null \
+        if curl -s --ssl-reqd --disable-epsv --max-time 90 -u "$CRED" -T "$local_path" "$HOST/$REMOTE_ROOT/$f" 2>/dev/null; then
+            got=$(curl -s --ssl-reqd --disable-epsv --max-time 30 -u "$CRED" "$HOST/$REMOTE_ROOT/$(dirname "$f")/" 2>/dev/null \
                   | awk -v n="$(basename "$f")" '$NF == n {print $5}')
             if [ "$got" = "$want" ]; then
                 echo "OK     : $f ($want byte)"
