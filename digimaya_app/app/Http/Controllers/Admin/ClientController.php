@@ -256,7 +256,16 @@ class ClientController extends Controller
             'contact_email' => ['nullable', 'email', 'max:255'],
             'contact_phone' => ['nullable', 'string', 'max:50'],
             'address' => ['nullable', 'string', 'max:1000'],
-            'monthly_retainer' => ['nullable', 'numeric', 'min:0'],
+            'monthly_retainer' => [
+                'nullable',
+                'numeric',
+                'min:0',
+                // Business rule: 'active' means the client is currently paying a monthly
+                // retainer. A client on hold is set to 'inactive' and stops paying. So an
+                // active client without a retainer is not a valid case — it is missing
+                // data, and it silently understates MRR. Require it exactly when active.
+                Rule::requiredIf(fn () => $request->input('status') === 'active'),
+            ],
             'acquisition_cost' => ['nullable', 'numeric', 'min:0'],
             'source' => ['nullable', 'string', 'max:100'],
             'interested_in' => ['nullable', Rule::in(array_keys(Client::INTERESTED_IN_OPTIONS))],

@@ -46,7 +46,14 @@
                     <div class="mt-2 text-3xl font-bold text-gray-900">
                         Rp{{ number_format($mrr, 0, ',', '.') }}
                     </div>
-                    <div class="mt-1 text-xs text-gray-500">Total retainer bulanan client aktif</div>
+                    @if($activeNoRetainer > 0)
+                        <div class="mt-1 text-xs text-yellow-700">
+                            <span class="font-medium">Angka ini terlalu rendah.</span>
+                            {{ $activeNoRetainer }} client aktif belum diisi retainer-nya.
+                        </div>
+                    @else
+                        <div class="mt-1 text-xs text-gray-500">Total retainer bulanan client aktif</div>
+                    @endif
                 </div>
 
                 {{-- Prospects (action card) --}}

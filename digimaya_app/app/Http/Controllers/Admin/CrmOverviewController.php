@@ -26,6 +26,15 @@ class CrmOverviewController extends Controller
         // ARPA = average MRR per active client (unit economics for sales/finance).
         $arpa = $activeClients > 0 ? $mrr / $activeClients : 0.0;
 
+        // Active means paying, so an active client with no retainer is missing data —
+        // it drags MRR and ARPA down silently. Surface the count instead of letting it
+        // rot: every one of these is revenue the dashboard is failing to report.
+        $activeNoRetainer = Client::where('status', 'active')
+            ->where(function ($q) {
+                $q->whereNull('monthly_retainer')->orWhere('monthly_retainer', '<=', 0);
+            })
+            ->count();
+
         // ---- Row 2: Monthly performance table ----
         // Per-month activations & churn, reused below to build the performance table.
 
@@ -279,6 +288,7 @@ class CrmOverviewController extends Controller
             'activeClients',
             'mrr',
             'arpa',
+            'activeNoRetainer',
             'monthlyPerformance',
             'historyFrom',
             'newClientsList',
