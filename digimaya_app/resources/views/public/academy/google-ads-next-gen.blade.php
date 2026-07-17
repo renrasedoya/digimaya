@@ -653,7 +653,104 @@
 </section>
 
 
-{{-- ============== SECTION 7 — TESTIMONI ============== --}}
+{{-- ============== SECTION 7 — DOKUMENTASI / KOLASE ============== --}}
+@php
+    // Kolase dokumentasi kegiatan. UNTUK MENGGANTI FOTO:
+    //  1. Taruh file fotonya di  public/images/nextgen/
+    //  2. Tulis nama filenya di 'file' di bawah, lalu isi 'alt' seadanya.
+    // Biarkan 'file' kosong ('') untuk menampilkan kotak placeholder bergaris.
+    // Jumlah item bebas — tambah atau kurangi baris array ini sesuka hati.
+    $collage = [
+        ['file' => '', 'alt' => 'Suasana sesi materi workshop Next Gen'],
+        ['file' => '', 'alt' => 'Peserta workshop Next Gen sedang praktek'],
+        ['file' => '', 'alt' => 'Renra Sedoya membawakan materi Google Ads'],
+        ['file' => '', 'alt' => 'Diskusi kelompok peserta Next Gen'],
+        ['file' => '', 'alt' => 'Foto bersama peserta Next Gen'],
+        ['file' => '', 'alt' => 'Sesi tanya jawab workshop Next Gen'],
+        ['file' => '', 'alt' => 'Suasana coffee break workshop Next Gen'],
+        ['file' => '', 'alt' => 'Peserta menerima sertifikat Next Gen'],
+        ['file' => '', 'alt' => 'Networking antar peserta Next Gen'],
+    ];
+@endphp
+
+{{-- Tata letak sengaja dibuat tidak seragam: tinggi tiap kotak berbeda dan
+     kemiringannya berselang-seling, supaya terasa seperti dokumentasi acara,
+     bukan katalog produk.
+
+     CSS ditulis di sini, bukan pakai utility Tailwind, karena proyek ini memakai
+     build Tailwind pra-kompilasi: columns-*, row-span-*, dan rotate kecil tidak
+     ada di dalamnya, dan menulisnya hanya menghasilkan class kosong. Preseden
+     yang sama dipakai di komponen col-tip. --}}
+<style>
+    .ng-collage { column-count: 2; column-gap: 1rem; }
+    @media (min-width: 768px) { .ng-collage { column-count: 3; column-gap: 1.25rem; } }
+
+    .ng-collage-item {
+        break-inside: avoid;
+        -webkit-column-break-inside: avoid;
+        margin: 0 0 1.25rem;
+        border-radius: 1rem;
+        overflow: hidden;
+        background: #f3f4f6;
+        box-shadow: 0 1px 3px rgba(0,0,0,.10), 0 1px 2px rgba(0,0,0,.06);
+    }
+
+    /* Tinggi bervariasi — ini yang bikin kolasenya tidak rapi-rapi amat. */
+    .ng-collage-item:nth-child(3n+1) { aspect-ratio: 3 / 4; }
+    .ng-collage-item:nth-child(3n+2) { aspect-ratio: 1 / 1; }
+    .ng-collage-item:nth-child(3n+3) { aspect-ratio: 4 / 5; }
+    .ng-collage-item:nth-child(5n)   { aspect-ratio: 16 / 11; }
+
+    /* Kemiringan halus, arah berselang-seling. Sengaja kecil: lebih dari 2deg
+       mulai terlihat seperti kesalahan, bukan gaya. */
+    .ng-collage-item:nth-child(2n) { transform: rotate(0.8deg); }
+    .ng-collage-item:nth-child(3n) { transform: rotate(-1deg); }
+    .ng-collage-item:nth-child(7n) { transform: rotate(1.4deg); }
+
+    .ng-collage-img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+    .ng-collage-ph {
+        width: 100%; height: 100%;
+        display: flex; align-items: center; justify-content: center;
+        background: repeating-linear-gradient(45deg, #f3f4f6, #f3f4f6 10px, #e5e7eb 10px, #e5e7eb 20px);
+        color: #9ca3af; font-size: .7rem; font-weight: 700;
+        letter-spacing: .08em; text-transform: uppercase;
+    }
+</style>
+
+<section class="bg-white border-t border-gray-100">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+
+        <div class="max-w-3xl mx-auto text-center mb-12 lg:mb-16">
+            <p class="eyebrow">
+                Dokumentasi
+            </p>
+            <h2 class="heading-section mb-4 leading-[1.2]">
+                Suasana Next Gen Sebelumnya
+            </h2>
+            <p class="body-text">
+                Dua hari penuh praktek, diskusi, dan ketemu langsung sama praktisi yang tiap hari pegang campaign beneran.
+            </p>
+        </div>
+
+        <div class="ng-collage max-w-4xl mx-auto">
+            @foreach($collage as $i => $photo)
+                <figure class="ng-collage-item">
+                    @if($photo['file'])
+                        <img src="{{ asset('images/nextgen/' . $photo['file']) }}"
+                             alt="{{ $photo['alt'] }}" loading="lazy" class="ng-collage-img">
+                    @else
+                        <div class="ng-collage-ph">Foto {{ $i + 1 }}</div>
+                    @endif
+                </figure>
+            @endforeach
+        </div>
+
+    </div>
+</section>
+
+
+{{-- ============== SECTION 8 — TESTIMONI ============== --}}
 <section class="bg-gray-50/50 border-t border-gray-100">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
 
@@ -803,7 +900,7 @@
 </section>
 
 
-{{-- ============== SECTION 8 — PRICING ============== --}}
+{{-- ============== SECTION 9 — PRICING ============== --}}
 <section id="pricing" class="bg-white border-t border-gray-100">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
 
@@ -925,7 +1022,7 @@
 </section>
 
 
-{{-- ============== SECTION 9 — FAQ ============== --}}
+{{-- ============== SECTION 10 — FAQ ============== --}}
 <section class="bg-gray-50/50 border-t border-gray-100">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
 
@@ -1042,7 +1139,7 @@
 </section>
 
 
-{{-- ============== SECTION 10 — CTA CLOSING ============== --}}
+{{-- ============== SECTION 11 — CTA CLOSING ============== --}}
 <section class="relative overflow-hidden bg-gradient-to-b from-brand-50/30 to-white border-t border-gray-100">
 
     <div aria-hidden="true" class="absolute inset-0 pointer-events-none">
