@@ -783,14 +783,18 @@
 
         <p class="text-center text-sm text-gray-500 mb-6">Lihat juga testimoni video dari peserta sebelumnya:</p>
 
+        {{-- Testimoni diambil dari YouTube Shorts, jadi rasionya potret 9:16.
+             aspect-ratio dipasang inline dengan sengaja: proyek ini memakai build
+             Tailwind pra-kompilasi yang hanya memuat aspect-video, aspect-[3/4],
+             dan aspect-[4/5] — menulis aspect-[9/16] menghasilkan class kosong. --}}
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
-            <div class="aspect-video rounded-2xl overflow-hidden bg-gray-100 shadow-sm">
+            <div class="max-w-xs mx-auto w-full rounded-2xl overflow-hidden bg-gray-100 shadow-sm" style="aspect-ratio: 9 / 16;">
                 <iframe class="w-full h-full" src="https://www.youtube.com/embed/OUgoTOGS6ww" title="Testimoni 1" loading="lazy" allowfullscreen></iframe>
             </div>
-            <div class="aspect-video rounded-2xl overflow-hidden bg-gray-100 shadow-sm">
+            <div class="max-w-xs mx-auto w-full rounded-2xl overflow-hidden bg-gray-100 shadow-sm" style="aspect-ratio: 9 / 16;">
                 <iframe class="w-full h-full" src="https://www.youtube.com/embed/fCrNrugaWNs" title="Testimoni 2" loading="lazy" allowfullscreen></iframe>
             </div>
-            <div class="aspect-video rounded-2xl overflow-hidden bg-gray-100 shadow-sm">
+            <div class="max-w-xs mx-auto w-full rounded-2xl overflow-hidden bg-gray-100 shadow-sm" style="aspect-ratio: 9 / 16;">
                 <iframe class="w-full h-full" src="https://www.youtube.com/embed/tWKOyaSTZYU" title="Testimoni 3" loading="lazy" allowfullscreen></iframe>
             </div>
         </div>
