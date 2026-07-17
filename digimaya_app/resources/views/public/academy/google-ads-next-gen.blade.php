@@ -1,13 +1,13 @@
 @extends('layouts.public')
 
 @section('meta_title', 'Workshop Google Ads Next Gen: Belajar Langsung dari Praktisi Premier Partner | Digimaya')
-@section('meta_description', 'Workshop offline Google Ads 2 hari full-day di kota-kota besar Indonesia. Materi lengkap dari basic sampai advanced, langsung oleh Renra Sedoya. Quota terbatas per batch.')
+@section('meta_description', 'Workshop offline Google Ads 2 hari full-day di Jogja, 29 & 30 Agustus 2026. Materi lengkap dari basic sampai advanced, langsung oleh Renra Sedoya. Kuota terbatas 30 peserta.')
 
 {{-- SEO Schema JSON-LD for this academy page --}}
 @push('head_schema')
     <x-seo.schema-course
         name="Workshop Google Ads Next Gen"
-        description="Workshop offline Google Ads 2 hari full-day di kota-kota besar Indonesia. Materi lengkap dari basic sampai advanced, langsung oleh Renra Sedoya. Quota terbatas per batch."
+        description="Workshop offline Google Ads 2 hari full-day di Jogja, 29 &amp; 30 Agustus 2026. Materi lengkap dari basic sampai advanced, langsung oleh Renra Sedoya. Kuota terbatas 30 peserta."
         courseType="Digital Marketing Workshop"
     />
 @endpush
@@ -60,8 +60,8 @@
             </div>
         </div>
 
-        {{-- Dual City Cards (inline) --}}
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {{-- City Card --}}
+        <div class="max-w-md mx-auto">
 
             {{-- JOGJA --}}
             <div class="bg-white border border-gray-200 rounded-2xl p-6 sm:p-7 shadow-sm hover:shadow-lg transition">
@@ -73,7 +73,7 @@
                         </svg>
                     </div>
                     <div>
-                        <p class="text-xs font-semibold text-brand uppercase tracking-wider mb-1">Batch 1</p>
+                        <p class="text-xs font-semibold text-brand uppercase tracking-wider mb-1">Batch Agustus</p>
                         <h2 class="text-2xl font-bold text-gray-900">Jogja</h2>
                     </div>
                 </div>
@@ -84,7 +84,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                         </svg>
                         <div>
-                            <p class="text-sm font-semibold text-gray-900">24 & 25 Januari 2026</p>
+                            <p class="text-sm font-semibold text-gray-900">29 & 30 Agustus 2026</p>
                             <p class="text-xs text-gray-600">Sabtu - Minggu, 08:00 - 18:00</p>
                         </div>
                     </div>
@@ -94,7 +94,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                         </svg>
                         <div>
-                            <p class="text-sm font-semibold text-gray-900">Venue Jogja</p>
+                            <p class="text-sm font-semibold text-gray-900">Kolektif Coworking Space &amp; Collaboraction</p>
                             <a href="https://maps.app.goo.gl/i642jSkwZxDvFqkWA" target="_blank" rel="noopener" class="text-xs text-brand hover:underline">
                                 Buka Google Maps &rsaquo;
                             </a>
@@ -104,48 +104,6 @@
 
                 <a href="#pricing" class="block w-full text-center py-3 bg-brand-50 hover:bg-brand-100 text-brand font-semibold text-sm rounded-lg transition">
                     Lihat Detail Tiket Jogja
-                </a>
-            </div>
-
-            {{-- JAKARTA --}}
-            <div class="bg-white border border-gray-200 rounded-2xl p-6 sm:p-7 shadow-sm hover:shadow-lg transition">
-                <div class="flex items-center gap-3 mb-4 pb-4 border-b border-gray-100">
-                    <div class="flex-shrink-0 w-12 h-12 bg-brand-50 rounded-xl flex items-center justify-center">
-                        <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <p class="text-xs font-semibold text-brand uppercase tracking-wider mb-1">Batch 2</p>
-                        <h2 class="text-2xl font-bold text-gray-900">Jakarta</h2>
-                    </div>
-                </div>
-
-                <div class="space-y-3 mb-5">
-                    <div class="flex items-start gap-3">
-                        <svg class="flex-shrink-0 w-5 h-5 text-gray-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                        </svg>
-                        <div>
-                            <p class="text-sm font-semibold text-gray-900">7 & 8 Februari 2026</p>
-                            <p class="text-xs text-gray-600">Sabtu - Minggu, 08:00 - 18:00</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-3">
-                        <svg class="flex-shrink-0 w-5 h-5 text-gray-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                        </svg>
-                        <div>
-                            <p class="text-sm font-semibold text-gray-900">Venue Jakarta</p>
-                            <p class="text-xs text-gray-500">Detail venue akan dishare H-7</p>
-                        </div>
-                    </div>
-                </div>
-
-                <a href="#pricing" class="block w-full text-center py-3 bg-brand-50 hover:bg-brand-100 text-brand font-semibold text-sm rounded-lg transition">
-                    Lihat Detail Tiket Jakarta
                 </a>
             </div>
 
@@ -163,7 +121,7 @@
             </div>
             <div class="text-center">
                 <p class="text-3xl font-bold text-brand mb-1">30</p>
-                <p class="text-xs text-gray-600 leading-tight">Max Peserta per Kota</p>
+                <p class="text-xs text-gray-600 leading-tight">Max Peserta</p>
             </div>
         </div>
 
@@ -853,24 +811,36 @@
                 Siap Jadi The Next Gen?
             </h2>
             <p class="body-text">
-                Pilih batch yang sesuai dengan lokasi dan jadwal kamu. Quota terbatas max 30 orang per kota.
+                Satu batch, kuota terbatas max 30 orang. Harga terbaik untuk 10 pendaftar pertama.
             </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 max-w-5xl mx-auto">
+        <div class="max-w-md mx-auto">
 
             {{-- JOGJA --}}
-            <div class="bg-white border border-gray-200 rounded-2xl p-6 sm:p-7 shadow-sm hover:shadow-lg transition flex flex-col">
+            <div class="bg-white border-2 border-brand rounded-2xl p-6 sm:p-7 shadow-lg transition flex flex-col">
                 <div class="flex items-center gap-2 mb-4">
-                    <span class="px-2 py-1 bg-brand-50 text-brand text-xs font-semibold rounded">Batch 1</span>
+                    <span class="px-2 py-1 bg-brand-50 text-brand text-xs font-semibold rounded">Batch Agustus</span>
                     <span class="px-2 py-1 bg-green-50 text-green-700 text-xs font-semibold rounded">Tersedia</span>
                 </div>
                 <h3 class="text-2xl font-bold text-gray-900 mb-1">Tiket Jogja</h3>
-                <p class="text-sm text-gray-600 mb-5">24 & 25 Januari 2026</p>
+                <p class="text-sm text-gray-600 mb-5">29 &amp; 30 Agustus 2026</p>
 
                 <div class="mb-5">
                     <p class="text-sm text-gray-400 line-through">Rp 5.000.000</p>
-                    <p class="text-3xl font-bold text-brand">Rp 1.950.000</p>
+
+                    <div class="flex items-baseline gap-2 mt-1">
+                        <p class="text-4xl font-bold text-brand">Rp 1.750.000</p>
+                    </div>
+                    <p class="text-xs font-bold text-brand uppercase tracking-wider mt-1">Early Bird</p>
+                    <p class="text-sm text-gray-700 mt-1">Khusus <span class="font-semibold">10 pendaftar pertama</span></p>
+
+                    <div class="mt-4 pt-4 border-t border-gray-100">
+                        <p class="text-sm text-gray-600">
+                            Setelah kuota early bird habis, harga presale
+                            <span class="font-semibold text-gray-900">Rp 1.950.000</span>
+                        </p>
+                    </div>
                 </div>
 
                 <ul class="space-y-2 mb-6 flex-1">
@@ -907,98 +877,6 @@
                 </a>
             </div>
 
-            {{-- JAKARTA --}}
-            <div class="bg-white border-2 border-brand rounded-2xl p-6 sm:p-7 shadow-lg flex flex-col relative">
-                <div class="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <span class="px-3 py-1 bg-brand text-white text-xs font-bold rounded-full whitespace-nowrap">Most Popular</span>
-                </div>
-                <div class="flex items-center gap-2 mb-4">
-                    <span class="px-2 py-1 bg-brand-50 text-brand text-xs font-semibold rounded">Batch 2</span>
-                    <span class="px-2 py-1 bg-green-50 text-green-700 text-xs font-semibold rounded">Tersedia</span>
-                </div>
-                <h3 class="text-2xl font-bold text-gray-900 mb-1">Tiket Jakarta</h3>
-                <p class="text-sm text-gray-600 mb-5">7 & 8 Februari 2026</p>
-
-                <div class="mb-5">
-                    <p class="text-sm text-gray-400 line-through">Rp 5.000.000</p>
-                    <p class="text-3xl font-bold text-brand">Rp 1.950.000</p>
-                </div>
-
-                <ul class="space-y-2 mb-6 flex-1">
-                    <li class="flex items-start gap-2">
-                        <svg class="flex-shrink-0 w-4 h-4 text-green-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                        <p class="text-sm text-gray-700">Akses 2 hari full-day workshop</p>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <svg class="flex-shrink-0 w-4 h-4 text-green-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                        <p class="text-sm text-gray-700">Sertifikat resmi Google</p>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <svg class="flex-shrink-0 w-4 h-4 text-green-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                        <p class="text-sm text-gray-700">Konsumsi lengkap 2 hari</p>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <svg class="flex-shrink-0 w-4 h-4 text-green-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                        <p class="text-sm text-gray-700">Support 1 bulan dari Digimaya</p>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <svg class="flex-shrink-0 w-4 h-4 text-green-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                        <p class="text-sm text-gray-700">Akses grup WA privat alumni</p>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <svg class="flex-shrink-0 w-4 h-4 text-green-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                        <p class="text-sm text-gray-700">Merchandise eksklusif</p>
-                    </li>
-                </ul>
-
-                <a href="https://wa.me/6285213228692?text=Halo%20Digimaya%2C%20saya%20mau%20daftar%20workshop%20Google%20Ads%20Next%20Gen%20Jakarta"
-                   target="_blank" rel="noopener"
-                   class="block w-full text-center py-3 bg-brand hover:bg-brand-700 text-white font-bold text-sm rounded-lg transition">
-                    Beli Tiket Jakarta
-                </a>
-            </div>
-
-            {{-- ALUMNI --}}
-            <div class="bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-400 rounded-2xl p-6 sm:p-7 shadow-sm hover:shadow-lg transition flex flex-col">
-                <div class="flex items-center gap-2 mb-4">
-                    <span class="px-2 py-1 bg-amber-100 text-amber-800 text-xs font-semibold rounded">Special</span>
-                    <span class="px-2 py-1 bg-green-50 text-green-700 text-xs font-semibold rounded">Tersedia</span>
-                </div>
-                <h3 class="text-2xl font-bold text-gray-900 mb-1">Tiket Alumni</h3>
-                <p class="text-sm text-gray-600 mb-5">Khusus alumni Next Gen sebelumnya</p>
-
-                <div class="mb-5">
-                    <p class="text-sm text-gray-400 line-through">Rp 5.000.000</p>
-                    <p class="text-3xl font-bold text-amber-700">Rp 950.000</p>
-                    <p class="text-xs text-amber-700 mt-1 font-semibold">Hemat 81%</p>
-                </div>
-
-                <ul class="space-y-2 mb-6 flex-1">
-                    <li class="flex items-start gap-2">
-                        <svg class="flex-shrink-0 w-4 h-4 text-green-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                        <p class="text-sm text-gray-700">Semua benefit reguler</p>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <svg class="flex-shrink-0 w-4 h-4 text-green-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                        <p class="text-sm text-gray-700">Refresher materi terbaru 2026</p>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <svg class="flex-shrink-0 w-4 h-4 text-green-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                        <p class="text-sm text-gray-700">Reunion dengan alumni lain</p>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <svg class="flex-shrink-0 w-4 h-4 text-green-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                        <p class="text-sm text-gray-700">Networking advanced level</p>
-                    </li>
-                </ul>
-
-                <a href="https://wa.me/6285213228692?text=Halo%20Digimaya%2C%20saya%20alumni%20Next%20Gen%20mau%20daftar%20batch%20baru"
-                   target="_blank" rel="noopener"
-                   class="block w-full text-center py-3 bg-amber-700 hover:bg-amber-800 text-white font-bold text-sm rounded-lg transition">
-                    Beli Tiket Alumni
-                </a>
-            </div>
-
         </div>
 
         {{-- Notes --}}
@@ -1011,7 +889,7 @@
                 </li>
                 <li class="flex items-start gap-2">
                     <svg class="flex-shrink-0 w-4 h-4 text-gray-400 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    <p class="text-sm text-gray-600">Kuota terbatas max 30 orang per kota, amankan seat kamu segera.</p>
+                    <p class="text-sm text-gray-600">Kuota terbatas max 30 orang, amankan seat kamu segera.</p>
                 </li>
                 <li class="flex items-start gap-2">
                     <svg class="flex-shrink-0 w-4 h-4 text-gray-400 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -1172,7 +1050,7 @@
         <div class="text-center">
             <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-amber-100 border border-amber-400 rounded-full mb-6">
                 <span class="w-2 h-2 rounded-full bg-yellow-500"></span>
-                <span class="text-xs font-semibold text-amber-800">Quota Terbatas 30 Peserta per Kota</span>
+                <span class="text-xs font-semibold text-amber-800">Kuota Terbatas 30 Peserta</span>
             </div>
 
             <h2 class="heading-section mb-6 leading-[1.2]">
