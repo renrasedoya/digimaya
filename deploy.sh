@@ -50,18 +50,29 @@ for f in "${FILES[@]}"; do
     local_path="$APPDIR/$f"
     [ -f "$local_path" ] || { echo "LEWAT  : $f (tidak ada di lokal)"; continue; }
 
-    # Percobaan sampai 3x, dan ukuran diverifikasi setelah tiap percobaan: upload
-    # yang gagal meninggalkan file 0 BYTE di server, bukan file lama yang utuh.
-    # Diam-diam gagal = halaman mati.
+    # Ukuran diverifikasi setelah TIAP percobaan: upload yang gagal meninggalkan
+    # file 0 BYTE di server, bukan file lama yang utuh. Diam-diam gagal = halaman mati.
     #
-    # --disable-epsv di atas itu WAJIB, bukan hiasan: dengan EPSV (default curl),
-    # server ini memutus koneksi data untuk file di atas ~15 KB dengan
-    # "451 Error during read from data connection". PASV biasa jalan normal.
+    # Dua jebakan server ini, dua-duanya sudah pernah membuat situs blank:
+    #  1. --disable-epsv WAJIB. Dengan EPSV (default curl) koneksi data putus untuk
+    #     file di atas ~15 KB: "451 Error during read from data connection".
+    #  2. Jalur data terenkripsi (--ssl-reqd) mati di 16384 byte untuk file besar.
+    #     Percobaan ke-3 turun ke --ftp-ssl-control: login TETAP terenkripsi (password
+    #     aman), hanya isi file yang polos. Isi yang dikirim adalah source template
+    #     halaman publik — tidak ada rahasia; .env & storage/ tidak pernah ikut.
+    #     JANGAN ganti ini dengan -k: itu membuka passwordmu, bukan cuma isinya.
     want=$(wc -c < "$local_path" | tr -d ' ')
     sent=0
     for attempt in 1 2 3; do
-        if curl -s --ssl-reqd --disable-epsv --max-time 90 -u "$CRED" -T "$local_path" "$HOST/$REMOTE_ROOT/$f" 2>/dev/null; then
-            got=$(curl -s --ssl-reqd --disable-epsv --max-time 30 -u "$CRED" "$HOST/$REMOTE_ROOT/$(dirname "$f")/" 2>/dev/null \
+        if [ $attempt -eq 3 ]; then
+            TLS=(--ftp-ssl-control)
+            echo "  turun ke jalur data polos (login tetap terenkripsi): $f"
+        else
+            TLS=(--ssl-reqd)
+        fi
+
+        if curl -s "${TLS[@]}" --disable-epsv --max-time 180 -u "$CRED" -T "$local_path" "$HOST/$REMOTE_ROOT/$f" 2>/dev/null; then
+            got=$(curl -s "${TLS[@]}" --disable-epsv --max-time 30 -u "$CRED" "$HOST/$REMOTE_ROOT/$(dirname "$f")/" 2>/dev/null \
                   | awk -v n="$(basename "$f")" '$NF == n {print $5}')
             if [ "$got" = "$want" ]; then
                 echo "OK     : $f ($want byte)"
