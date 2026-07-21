@@ -1,13 +1,13 @@
 @extends('layouts.public')
 
 @section('meta_title', 'Workshop Google Ads Next Gen: Belajar Langsung dari Praktisi Premier Partner | Digimaya')
-@section('meta_description', 'Workshop offline Google Ads 2 hari full-day di Jogja, 29 & 30 Agustus 2026. Materi lengkap dari basic sampai advanced, langsung oleh Renra Sedoya. Kuota terbatas 30 peserta.')
+@section('meta_description', 'Workshop Google Ads 3 hari: 2 hari tatap muka di Jogja (29 & 30 Agustus 2026) + 1 hari online. Semua sesi direkam. Langsung oleh Renra Sedoya & tim Google Indonesia. Kuota terbatas 30 peserta.')
 
 {{-- SEO Schema JSON-LD for this academy page --}}
 @push('head_schema')
     <x-seo.schema-course
         name="Workshop Google Ads Next Gen"
-        description="Workshop offline Google Ads 2 hari full-day di Jogja, 29 &amp; 30 Agustus 2026. Materi lengkap dari basic sampai advanced, langsung oleh Renra Sedoya. Kuota terbatas 30 peserta."
+        description="Workshop Google Ads 3 hari: 2 hari tatap muka di Jogja (29 &amp; 30 Agustus 2026) + 1 hari online. Semua sesi direkam. Langsung oleh Renra Sedoya &amp; tim Google Indonesia. Kuota terbatas 30 peserta."
         courseType="Digital Marketing Workshop"
     />
 @endpush
@@ -30,7 +30,7 @@
             {{-- Badge --}}
             <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-amber-100 border border-amber-400 rounded-full mb-6">
                 <span class="w-2 h-2 rounded-full bg-yellow-500"></span>
-                <span class="text-xs font-semibold text-amber-800">Workshop Offline 2 Hari Full-Day</span>
+                <span class="text-xs font-semibold text-amber-800">3 Hari · 2 Offline di Jogja + 1 Online</span>
             </div>
 
             <h1 class="heading-hero mb-6">
@@ -41,7 +41,7 @@
             </h1>
 
             <p class="body-lead mb-8 max-w-2xl mx-auto">
-                Workshop offline Google Ads 2 hari full-day yang fokus pada praktek nyata. Mulai dari strategi terbaru di era AI, best practice para spesialis, hingga studi kasus campaign yang sudah terbukti berjalan.
+                Workshop Google Ads 3 hari — 2 hari tatap muka di Jogja plus 1 hari online — yang fokus pada praktek nyata. Mulai dari strategi terbaru di era AI, best practice para spesialis, hingga studi kasus campaign yang sudah terbukti berjalan. Semua sesi direkam, jadi bisa kamu tonton ulang.
             </p>
 
             <div class="flex flex-col sm:flex-row gap-3 justify-center mb-12">
@@ -84,8 +84,8 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                         </svg>
                         <div>
-                            <p class="text-sm font-semibold text-gray-900">29 & 30 Agustus 2026</p>
-                            <p class="text-xs text-gray-600">Sabtu - Minggu, 08:00 - 18:00</p>
+                            <p class="text-sm font-semibold text-gray-900">29 &amp; 30 Agustus 2026 · Offline</p>
+                            <p class="text-xs text-gray-600">2 hari tatap muka · Sabtu–Minggu, 08:00–18:00</p>
                         </div>
                     </div>
                     <div class="flex items-start gap-3">
@@ -100,6 +100,15 @@
                             </a>
                         </div>
                     </div>
+                    <div class="flex items-start gap-3">
+                        <svg class="flex-shrink-0 w-5 h-5 text-gray-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                        </svg>
+                        <div>
+                            <p class="text-sm font-semibold text-gray-900">+ 1 Hari Online</p>
+                            <p class="text-xs text-gray-600">± 1 minggu setelah kelas offline · via Zoom, direkam</p>
+                        </div>
+                    </div>
                 </div>
 
                 <a href="#pricing" class="block w-full text-center py-3 bg-brand-50 hover:bg-brand-100 text-brand font-semibold text-sm rounded-lg transition">
@@ -112,12 +121,12 @@
         {{-- Stats --}}
         <div class="grid grid-cols-3 gap-4 max-w-2xl mx-auto pt-10 mt-10 border-t border-gray-200">
             <div class="text-center">
-                <p class="text-3xl font-bold text-brand mb-1">2</p>
-                <p class="text-xs text-gray-600 leading-tight">Hari Full-Day</p>
+                <p class="text-3xl font-bold text-brand mb-1">3</p>
+                <p class="text-xs text-gray-600 leading-tight">Hari Belajar</p>
             </div>
             <div class="text-center">
-                <p class="text-3xl font-bold text-brand mb-1">16</p>
-                <p class="text-xs text-gray-600 leading-tight">Sesi Materi</p>
+                <p class="text-3xl font-bold text-brand mb-1">10</p>
+                <p class="text-xs text-gray-600 leading-tight">Materi Inti</p>
             </div>
             <div class="text-center">
                 <p class="text-3xl font-bold text-brand mb-1">30</p>
@@ -141,7 +150,7 @@
                 Apa itu Google Ads Next Gen?
             </h2>
             <p class="body-text">
-                Next Gen adalah workshop offline Google Ads 2 hari full-day dari Digimaya yang fokus pada praktek nyata. Mulai dari strategi terbaru di era AI, best practice para spesialis Google Ads, hingga studi kasus real dari campaign yang sudah terbukti berjalan.
+                Next Gen adalah workshop Google Ads 3 hari dari Digimaya yang fokus pada praktek nyata: 2 hari tatap muka di Jogja plus 1 hari online sekitar seminggu setelahnya. Mulai dari strategi terbaru di era AI, best practice para spesialis Google Ads, hingga studi kasus real dari campaign yang sudah terbukti berjalan. Semua sesi direkam, jadi bisa ditonton ulang.
             </p>
         </div>
 
@@ -545,7 +554,7 @@
                     </svg>
                 </div>
                 <h3 class="font-bold text-gray-900 mb-2">Konsumsi Lengkap</h3>
-                <p class="text-sm text-gray-600 leading-relaxed">Coffee break pagi, lunch siang, dan coffee break sore selama 2 hari workshop.</p>
+                <p class="text-sm text-gray-600 leading-relaxed">Coffee break pagi, lunch siang, dan coffee break sore selama 2 hari kelas tatap muka.</p>
             </div>
 
             <div class="bg-white border border-gray-100 rounded-2xl p-6 transition hover:border-brand/30 hover:shadow-lg">
@@ -570,7 +579,7 @@
 
         <div class="max-w-3xl mx-auto text-center mb-12 lg:mb-16">
             <p class="eyebrow">
-                Agenda Lengkap
+                Materi Workshop
             </p>
             <h2 class="heading-section mb-4 leading-[1.2]">
                 Pelatihan Google Ads Terlengkap
@@ -580,177 +589,33 @@
             </p>
         </div>
 
-        <div class="space-y-8 max-w-4xl mx-auto">
-
-            {{-- HARI 1 --}}
-            <div>
-                <div class="flex items-center gap-3 mb-5">
-                    <span class="inline-flex items-center justify-center w-10 h-10 bg-brand text-white rounded-full font-bold text-sm">1</span>
-                    <div>
-                        <h3 class="text-xl font-bold text-gray-900">Hari Pertama</h3>
-                        <p class="text-sm text-gray-600">Foundation dan core skills Google Ads</p>
+        <div class="max-w-4xl mx-auto">
+            {{-- Daftar materi sengaja dibuat ringkas (bukan jadwal per-sesi) agar
+                 mudah disesuaikan jika ada perubahan. Edit array di bawah untuk
+                 menambah/mengurangi materi. --}}
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                @foreach([
+                    'Google Ads Audit Mastery',
+                    'Google Tag Manager Mastery',
+                    'Click Fraud Analysis',
+                    'Search Ads Mastery',
+                    'Google Ads Common Issues',
+                    'Demand Gen Mastery',
+                    'Performance Max Mastery',
+                    'Offline Conversion with GASS',
+                    'Scale Up Playbook',
+                    'Google Ads Certification',
+                ] as $i => $materi)
+                    <div class="flex items-center gap-3 bg-white border border-gray-100 rounded-xl px-4 py-3 shadow-sm">
+                        <span class="flex-shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-full bg-brand-50 text-brand font-bold text-xs">{{ $i + 1 }}</span>
+                        <p class="text-sm font-semibold text-gray-800">{{ $materi }}</p>
                     </div>
-                </div>
-
-                <div class="bg-white border border-gray-100 rounded-2xl overflow-hidden">
-                    <div class="divide-y divide-gray-100">
-
-                        <div class="flex items-center justify-between gap-4 px-5 py-4 bg-gray-50">
-                            <p class="text-sm font-semibold text-gray-700">Registration</p>
-                            <p class="text-xs text-gray-500 whitespace-nowrap">08:00 - 08:40</p>
-                        </div>
-
-                        <div class="flex items-center justify-between gap-4 px-5 py-4">
-                            <p class="text-sm font-semibold text-gray-700">Opening</p>
-                            <p class="text-xs text-gray-500 whitespace-nowrap">08:40 - 09:00</p>
-                        </div>
-
-                        <div class="flex items-center justify-between gap-4 px-5 py-3 bg-amber-50">
-                            <p class="text-xs font-semibold text-amber-800 uppercase tracking-wider">Coffee Break</p>
-                            <p class="text-xs text-amber-700">15 menit</p>
-                        </div>
-
-                        <div class="px-5 py-4">
-                            <div class="flex items-center justify-between gap-4 mb-1">
-                                <p class="font-semibold text-gray-900">Google Ads Audit Mastery</p>
-                                <p class="text-xs text-gray-500 whitespace-nowrap">09:00 - 10:00</p>
-                            </div>
-                            <p class="text-xs text-brand font-medium">Renra Sedoya</p>
-                        </div>
-
-                        <div class="px-5 py-4">
-                            <div class="flex items-center justify-between gap-4 mb-1">
-                                <p class="font-semibold text-gray-900">Google Tag Manager Mastery</p>
-                                <p class="text-xs text-gray-500 whitespace-nowrap">10:00 - 12:00</p>
-                            </div>
-                            <p class="text-xs text-brand font-medium">Renra Sedoya</p>
-                        </div>
-
-                        <div class="flex items-center justify-between gap-4 px-5 py-3 bg-amber-50">
-                            <p class="text-xs font-semibold text-amber-800 uppercase tracking-wider">Lunch Time</p>
-                            <p class="text-xs text-amber-700">1 jam</p>
-                        </div>
-
-                        <div class="px-5 py-4">
-                            <div class="flex items-center justify-between gap-4 mb-1">
-                                <p class="font-semibold text-gray-900">Click Fraud Analysis</p>
-                                <p class="text-xs text-gray-500 whitespace-nowrap">13:00 - 14:00</p>
-                            </div>
-                            <p class="text-xs text-brand font-medium">Renra Sedoya</p>
-                        </div>
-
-                        <div class="px-5 py-4">
-                            <div class="flex items-center justify-between gap-4 mb-1">
-                                <p class="font-semibold text-gray-900">Search Ads Mastery</p>
-                                <p class="text-xs text-gray-500 whitespace-nowrap">14:00 - 15:20</p>
-                            </div>
-                            <p class="text-xs text-brand font-medium">Renra Sedoya</p>
-                        </div>
-
-                        <div class="flex items-center justify-between gap-4 px-5 py-3 bg-amber-50">
-                            <p class="text-xs font-semibold text-amber-800 uppercase tracking-wider">Coffee Break</p>
-                            <p class="text-xs text-amber-700">40 menit</p>
-                        </div>
-
-                        <div class="px-5 py-4">
-                            <div class="flex items-center justify-between gap-4 mb-1">
-                                <p class="font-semibold text-gray-900">Google Ads Common Issues</p>
-                                <p class="text-xs text-gray-500 whitespace-nowrap">16:00 - 17:00</p>
-                            </div>
-                            <p class="text-xs text-brand font-medium">Renra Sedoya</p>
-                        </div>
-
-                    </div>
-                </div>
+                @endforeach
             </div>
 
-            {{-- HARI 2 --}}
-            <div>
-                <div class="flex items-center gap-3 mb-5">
-                    <span class="inline-flex items-center justify-center w-10 h-10 bg-brand text-white rounded-full font-bold text-sm">2</span>
-                    <div>
-                        <h3 class="text-xl font-bold text-gray-900">Hari Kedua</h3>
-                        <p class="text-sm text-gray-600">Advanced topics dan scaling strategy</p>
-                    </div>
-                </div>
-
-                <div class="bg-white border border-gray-100 rounded-2xl overflow-hidden">
-                    <div class="divide-y divide-gray-100">
-
-                        <div class="flex items-center justify-between gap-4 px-5 py-4 bg-gray-50">
-                            <p class="text-sm font-semibold text-gray-700">Registration</p>
-                            <p class="text-xs text-gray-500 whitespace-nowrap">08:00 - 08:40</p>
-                        </div>
-
-                        <div class="flex items-center justify-between gap-4 px-5 py-4">
-                            <p class="text-sm font-semibold text-gray-700">Opening</p>
-                            <p class="text-xs text-gray-500 whitespace-nowrap">08:40 - 09:00</p>
-                        </div>
-
-                        <div class="flex items-center justify-between gap-4 px-5 py-3 bg-amber-50">
-                            <p class="text-xs font-semibold text-amber-800 uppercase tracking-wider">Coffee Break</p>
-                            <p class="text-xs text-amber-700">15 menit</p>
-                        </div>
-
-                        <div class="px-5 py-4">
-                            <div class="flex items-center justify-between gap-4 mb-1">
-                                <p class="font-semibold text-gray-900">Demand Gen Mastery</p>
-                                <p class="text-xs text-gray-500 whitespace-nowrap">09:00 - 10:30</p>
-                            </div>
-                            <p class="text-xs text-brand font-medium">Renra Sedoya</p>
-                        </div>
-
-                        <div class="px-5 py-4">
-                            <div class="flex items-center justify-between gap-4 mb-1">
-                                <p class="font-semibold text-gray-900">Performance Max Mastery</p>
-                                <p class="text-xs text-gray-500 whitespace-nowrap">10:30 - 12:00</p>
-                            </div>
-                            <p class="text-xs text-brand font-medium">Renra Sedoya</p>
-                        </div>
-
-                        <div class="flex items-center justify-between gap-4 px-5 py-3 bg-amber-50">
-                            <p class="text-xs font-semibold text-amber-800 uppercase tracking-wider">Lunch Time</p>
-                            <p class="text-xs text-amber-700">1 jam</p>
-                        </div>
-
-                        <div class="px-5 py-4">
-                            <div class="flex items-center justify-between gap-4 mb-1">
-                                <p class="font-semibold text-gray-900">Offline Conversion with GASS</p>
-                                <p class="text-xs text-gray-500 whitespace-nowrap">13:00 - 14:00</p>
-                            </div>
-                            <p class="text-xs text-brand font-medium">Jhonson</p>
-                        </div>
-
-                        <div class="px-5 py-4">
-                            <div class="flex items-center justify-between gap-4 mb-1">
-                                <p class="font-semibold text-gray-900">Scale Up Playbook</p>
-                                <p class="text-xs text-gray-500 whitespace-nowrap">14:00 - 15:00</p>
-                            </div>
-                            <p class="text-xs text-brand font-medium">Renra Sedoya</p>
-                        </div>
-
-                        <div class="flex items-center justify-between gap-4 px-5 py-3 bg-amber-50">
-                            <p class="text-xs font-semibold text-amber-800 uppercase tracking-wider">Coffee Break</p>
-                            <p class="text-xs text-amber-700">30 menit</p>
-                        </div>
-
-                        <div class="px-5 py-4">
-                            <div class="flex items-center justify-between gap-4 mb-1">
-                                <p class="font-semibold text-gray-900">Google Ads Certification</p>
-                                <p class="text-xs text-gray-500 whitespace-nowrap">15:30 - 17:00</p>
-                            </div>
-                            <p class="text-xs text-brand font-medium">Renra Sedoya</p>
-                        </div>
-
-                        <div class="flex items-center justify-between gap-4 px-5 py-4 bg-gray-50">
-                            <p class="text-sm font-semibold text-gray-700">Closing & Foto Bersama</p>
-                            <p class="text-xs text-gray-500 whitespace-nowrap">17:00 - 17:30</p>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
+            <p class="text-center text-xs text-gray-400 mt-6 max-w-2xl mx-auto">
+                Seluruh materi di atas dibahas tuntas selama 3 hari: 2 hari tatap muka di Jogja + 1 hari online. Semua sesi direkam, jadi bisa kamu tonton ulang. Rincian materi dapat menyesuaikan perkembangan terbaru Google Ads.
+            </p>
         </div>
 
     </div>
@@ -837,7 +702,7 @@
                 Suasana Next Gen Sebelumnya
             </h2>
             <p class="body-text">
-                Dua hari penuh praktek, diskusi, dan ketemu langsung sama praktisi yang tiap hari pegang campaign beneran.
+                Praktek intensif, diskusi, dan ketemu langsung sama praktisi yang tiap hari pegang campaign beneran.
             </p>
         </div>
 
@@ -1033,7 +898,7 @@
                     <span class="px-2 py-1 bg-green-50 text-green-700 text-xs font-semibold rounded">Tersedia</span>
                 </div>
                 <h3 class="text-2xl font-bold text-gray-900 mb-1">Tiket Jogja</h3>
-                <p class="text-sm text-gray-600 mb-5">29 &amp; 30 Agustus 2026</p>
+                <p class="text-sm text-gray-600 mb-5">2 hari offline · 29 &amp; 30 Agustus 2026 <span class="text-gray-400">+ 1 hari online</span></p>
 
                 <div class="mb-5">
                     <p class="text-sm text-gray-400 line-through">Rp 5.000.000</p>
@@ -1055,7 +920,7 @@
                 <ul class="space-y-2 mb-6 flex-1">
                     <li class="flex items-start gap-2">
                         <svg class="flex-shrink-0 w-4 h-4 text-green-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                        <p class="text-sm text-gray-700">Akses 2 hari full-day workshop</p>
+                        <p class="text-sm text-gray-700">Akses 3 hari workshop (2 offline + 1 online)</p>
                     </li>
                     <li class="flex items-start gap-2">
                         <svg class="flex-shrink-0 w-4 h-4 text-green-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
@@ -1063,7 +928,7 @@
                     </li>
                     <li class="flex items-start gap-2">
                         <svg class="flex-shrink-0 w-4 h-4 text-green-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                        <p class="text-sm text-gray-700">Konsumsi lengkap 2 hari</p>
+                        <p class="text-sm text-gray-700">Konsumsi lengkap 2 hari offline + rekaman semua sesi</p>
                     </li>
                     <li class="flex items-start gap-2">
                         <svg class="flex-shrink-0 w-4 h-4 text-green-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
@@ -1192,7 +1057,7 @@
                     </button>
                     <div x-show="open === 3" x-transition style="display: none;">
                         <div class="px-5 sm:px-6 pb-5 pt-1 text-sm sm:text-base text-gray-600 leading-relaxed">
-                            Next Gen offline jadi kamu bisa langsung tanya jawab dengan pemateri, networking dengan praktisi lain, dan fokus full 2 hari tanpa distraction. Materi juga komprehensif dari basic sampai advanced, plus komunitas alumni aktif.
+                            Next Gen digelar 2 hari tatap muka di Jogja jadi kamu bisa langsung tanya jawab dengan pemateri, networking dengan praktisi lain, dan fokus penuh tanpa distraction. Ditambah 1 hari online setelahnya, dan semua sesi direkam. Materi juga komprehensif dari basic sampai advanced, plus komunitas alumni aktif.
                         </div>
                     </div>
                 </div>
@@ -1234,7 +1099,7 @@
                     </button>
                     <div x-show="open === 6" x-transition style="display: none;">
                         <div class="px-5 sm:px-6 pb-5 pt-1 text-sm sm:text-base text-gray-600 leading-relaxed">
-                            Slot kamu bisa di-transfer ke orang lain atau di-postpone ke batch berikutnya dengan pemberitahuan minimal H-7. Hubungi via WhatsApp untuk koordinasi penggantian.
+                            Tenang, semua sesi (offline maupun online) direkam, jadi kamu tetap bisa menontonnya ulang kapan saja meski berhalangan hadir. Selain itu, slot kamu juga bisa di-transfer ke orang lain atau di-postpone ke batch berikutnya dengan pemberitahuan minimal H-7. Hubungi via WhatsApp untuk koordinasi.
                         </div>
                     </div>
                 </div>
@@ -1267,7 +1132,7 @@
             </h2>
 
             <p class="body-text mb-10 max-w-xl mx-auto">
-                Investasi 2 hari kamu untuk skill Google Ads yang akan kepakai bertahun-tahun ke depan. Sudah banyak praktisi yang upgrade skill mereka di Next Gen, sekarang giliran kamu.
+                Investasi 3 hari kamu untuk skill Google Ads yang akan kepakai bertahun-tahun ke depan. Sudah banyak praktisi yang upgrade skill mereka di Next Gen, sekarang giliran kamu.
             </p>
 
             <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
