@@ -157,6 +157,15 @@
                     Setelah menyelesaikan workshop, kamu akan mendapatkan sertifikat resmi sebagai bukti kompetensi. Nilai tambah untuk profil profesional atau tim marketing kamu.
                 </p>
 
+                {{-- Gambar sertifikat dari CDN ImageKit. Lebar dikunci di max-w-md
+                     (≈448px = resolusi asli) supaya tidak di-upscale dan pecah. --}}
+                <div class="max-w-md mx-auto mb-6">
+                    <img src="https://ik.imagekit.io/digimaya/NextGen/sertifikat.jpg?updatedAt=1750693519217"
+                         alt="Contoh sertifikat resmi Google untuk peserta workshop Next Gen"
+                         loading="lazy"
+                         class="w-full h-auto rounded-xl border border-brand/20 shadow-md bg-white">
+                </div>
+
                 <div class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-brand/20 rounded-full">
                     <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
