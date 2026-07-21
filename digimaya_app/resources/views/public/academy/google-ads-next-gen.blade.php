@@ -179,7 +179,7 @@
                     <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
                     </svg>
-                    <span class="text-sm font-semibold text-gray-700">Sertifikat fisik + digital</span>
+                    <span class="text-sm font-semibold text-gray-700">Sertifikat digital resmi Google</span>
                 </div>
             </div>
         </div>
@@ -514,7 +514,7 @@
                     </svg>
                 </div>
                 <h3 class="font-bold text-gray-900 mb-2">Sertifikat Resmi Google</h3>
-                <p class="text-sm text-gray-600 leading-relaxed">Sertifikat fisik dan digital sebagai bukti kompetensi yang bisa kamu cantumkan di CV atau LinkedIn.</p>
+                <p class="text-sm text-gray-600 leading-relaxed">Sertifikat digital resmi sebagai bukti kompetensi yang bisa kamu cantumkan di CV atau LinkedIn.</p>
             </div>
 
             <div class="bg-white border border-gray-100 rounded-2xl p-6 transition hover:border-brand/30 hover:shadow-lg">
