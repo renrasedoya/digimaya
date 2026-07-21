@@ -138,6 +138,28 @@
 </section>
 
 
+{{-- ============== SECTION 1.5 — VIDEO AJAKAN (social proof) ============== --}}
+<section class="bg-gray-50/50 border-t border-gray-100">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
+        <div class="text-center mb-8">
+            <p class="eyebrow">Undangan Khusus</p>
+            <h2 class="heading-section mb-4 leading-[1.2]">Diajak Langsung oleh Tim Google Indonesia</h2>
+            <p class="body-text">
+                Ivan Ruben Darmawan dari Google Indonesia ngajak kamu buat gabung di Next Gen. Tonton pesan singkatnya.
+            </p>
+        </div>
+        <div class="aspect-video rounded-2xl overflow-hidden bg-gray-900 shadow-lg max-w-2xl mx-auto">
+            <iframe class="w-full h-full"
+                    src="https://www.youtube.com/embed/FK_X_ItUlKA"
+                    title="Ayo Daftar Google Ads Next Gen"
+                    loading="lazy"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen></iframe>
+        </div>
+    </div>
+</section>
+
+
 {{-- ============== SECTION 2 — ABOUT NEXT GEN ============== --}}
 <section class="bg-white border-t border-gray-100">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
