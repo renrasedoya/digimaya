@@ -656,21 +656,25 @@
 {{-- ============== SECTION 7 — DOKUMENTASI / KOLASE ============== --}}
 @php
     // Kolase dokumentasi kegiatan. UNTUK MENGGANTI FOTO:
-    //  1. Taruh file fotonya di  public/images/nextgen/
-    //  2. Tulis nama filenya di 'file' di bawah, lalu isi 'alt' seadanya.
-    // Biarkan 'file' kosong ('') untuk menampilkan kotak placeholder bergaris.
-    // Jumlah item bebas — tambah atau kurangi baris array ini sesuka hati.
+    //  - 'src' boleh URL penuh (mis. dari CDN ImageKit) ATAU nama file lokal di
+    //    public/images/nextgen/. Kosongkan ('') untuk menampilkan placeholder.
+    //  - Jumlah item bebas — tambah/kurangi baris array ini sesuka hati.
     $collage = [
-        ['file' => '', 'alt' => 'Suasana sesi materi workshop Next Gen'],
-        ['file' => '', 'alt' => 'Peserta workshop Next Gen sedang praktek'],
-        ['file' => '', 'alt' => 'Renra Sedoya membawakan materi Google Ads'],
-        ['file' => '', 'alt' => 'Diskusi kelompok peserta Next Gen'],
-        ['file' => '', 'alt' => 'Foto bersama peserta Next Gen'],
-        ['file' => '', 'alt' => 'Sesi tanya jawab workshop Next Gen'],
-        ['file' => '', 'alt' => 'Suasana coffee break workshop Next Gen'],
-        ['file' => '', 'alt' => 'Peserta menerima sertifikat Next Gen'],
-        ['file' => '', 'alt' => 'Networking antar peserta Next Gen'],
+        ['src' => 'https://ik.imagekit.io/dgmy/digimaya/foto-1-nextgen.png', 'alt' => 'Suasana sesi materi workshop Next Gen'],
+        ['src' => 'https://ik.imagekit.io/dgmy/digimaya/foto-2-nextgen.png', 'alt' => 'Peserta workshop Next Gen sedang praktek'],
+        ['src' => 'https://ik.imagekit.io/dgmy/digimaya/foto-3-nextgen.png', 'alt' => 'Renra Sedoya membawakan materi Google Ads'],
+        ['src' => 'https://ik.imagekit.io/dgmy/digimaya/foto-4-nextgen.png', 'alt' => 'Diskusi kelompok peserta Next Gen'],
+        ['src' => 'https://ik.imagekit.io/dgmy/digimaya/foto-5-nextgen.png', 'alt' => 'Foto bersama peserta Next Gen'],
+        ['src' => 'https://ik.imagekit.io/dgmy/digimaya/foto-6-nextgen.png', 'alt' => 'Sesi tanya jawab workshop Next Gen'],
+        ['src' => 'https://ik.imagekit.io/dgmy/digimaya/foto-7-nextgen.png', 'alt' => 'Suasana coffee break workshop Next Gen'],
+        ['src' => 'https://ik.imagekit.io/dgmy/digimaya/foto-8-nextgen.png', 'alt' => 'Peserta menerima sertifikat Next Gen'],
+        ['src' => 'https://ik.imagekit.io/dgmy/digimaya/foto-9-nextgen.png', 'alt' => 'Networking antar peserta Next Gen'],
     ];
+
+    // Terima URL penuh apa adanya; kalau bukan URL, anggap file lokal.
+    $collageSrc = fn ($s) => \Illuminate\Support\Str::startsWith($s, ['http://', 'https://'])
+        ? $s
+        : asset('images/nextgen/' . $s);
 @endphp
 
 {{-- Tata letak sengaja dibuat tidak seragam: tinggi tiap kotak berbeda dan
@@ -736,8 +740,8 @@
         <div class="ng-collage max-w-4xl mx-auto">
             @foreach($collage as $i => $photo)
                 <figure class="ng-collage-item">
-                    @if($photo['file'])
-                        <img src="{{ asset('images/nextgen/' . $photo['file']) }}"
+                    @if($photo['src'])
+                        <img src="{{ $collageSrc($photo['src']) }}"
                              alt="{{ $photo['alt'] }}" loading="lazy" class="ng-collage-img">
                     @else
                         <div class="ng-collage-ph">Foto {{ $i + 1 }}</div>
