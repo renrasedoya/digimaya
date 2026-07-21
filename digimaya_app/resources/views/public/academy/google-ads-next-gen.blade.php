@@ -191,9 +191,9 @@
             {{-- Renra --}}
             <div class="bg-white border border-gray-100 rounded-2xl p-6 sm:p-7 shadow-sm">
                 <div class="flex items-center gap-4 mb-5 pb-5 border-b border-gray-100">
-                    <div class="flex-shrink-0 w-16 h-16 rounded-full bg-brand text-white flex items-center justify-center font-bold text-2xl">
-                        RS
-                    </div>
+                    <img src="https://ik.imagekit.io/dgmy/Insider/renra.png?updatedAt=1751596708863"
+                         alt="Renra Sedoya" loading="lazy"
+                         class="flex-shrink-0 w-16 h-16 rounded-full object-cover">
                     <div>
                         <p class="font-bold text-gray-900 text-lg">Renra Sedoya</p>
                         <p class="text-sm text-gray-600">Founder Digimaya</p>
@@ -265,9 +265,9 @@
             {{-- Ivan (Google Indonesia) --}}
             <div class="bg-white border border-gray-100 rounded-2xl p-6 sm:p-7 shadow-sm">
                 <div class="flex items-center gap-4 mb-5 pb-5 border-b border-gray-100">
-                    <div class="flex-shrink-0 w-16 h-16 rounded-full bg-blue-700 text-white flex items-center justify-center font-bold text-2xl">
-                        IR
-                    </div>
+                    <img src="https://ik.imagekit.io/dgmy/Insider/ivan.png?updatedAt=1751596950932"
+                         alt="Ivan Ruben Darmawan" loading="lazy"
+                         class="flex-shrink-0 w-16 h-16 rounded-full object-cover">
                     <div>
                         <p class="font-bold text-gray-900 text-lg">Ivan Ruben Darmawan</p>
                         <p class="text-sm text-gray-600">Tim Google Indonesia</p>
