@@ -505,7 +505,7 @@
             </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
 
             <div class="bg-white border border-gray-100 rounded-2xl p-6 transition hover:border-brand/30 hover:shadow-lg">
                 <div class="flex-shrink-0 w-10 h-10 bg-brand-50 rounded-lg flex items-center justify-center mb-4">
@@ -535,26 +535,6 @@
                 </div>
                 <h3 class="font-bold text-gray-900 mb-2">Grup WhatsApp Privat</h3>
                 <p class="text-sm text-gray-600 leading-relaxed">Akses grup diskusi privat dengan alumni Next Gen, tempat sharing problem dan solusi Google Ads.</p>
-            </div>
-
-            <div class="bg-white border border-gray-100 rounded-2xl p-6 transition hover:border-brand/30 hover:shadow-lg">
-                <div class="flex-shrink-0 w-10 h-10 bg-brand-50 rounded-lg flex items-center justify-center mb-4">
-                    <svg class="w-5 h-5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
-                    </svg>
-                </div>
-                <h3 class="font-bold text-gray-900 mb-2">Merchandise Eksklusif</h3>
-                <p class="text-sm text-gray-600 leading-relaxed">Merchandise dari Digimaya khusus untuk peserta Next Gen sebagai memorabilia workshop.</p>
-            </div>
-
-            <div class="bg-white border border-gray-100 rounded-2xl p-6 transition hover:border-brand/30 hover:shadow-lg">
-                <div class="flex-shrink-0 w-10 h-10 bg-brand-50 rounded-lg flex items-center justify-center mb-4">
-                    <svg class="w-5 h-5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
-                    </svg>
-                </div>
-                <h3 class="font-bold text-gray-900 mb-2">Konsumsi Lengkap</h3>
-                <p class="text-sm text-gray-600 leading-relaxed">Coffee break pagi, lunch siang, dan coffee break sore selama 2 hari kelas tatap muka.</p>
             </div>
 
             <div class="bg-white border border-gray-100 rounded-2xl p-6 transition hover:border-brand/30 hover:shadow-lg">
@@ -928,7 +908,7 @@
                     </li>
                     <li class="flex items-start gap-2">
                         <svg class="flex-shrink-0 w-4 h-4 text-green-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                        <p class="text-sm text-gray-700">Konsumsi lengkap 2 hari offline + rekaman semua sesi</p>
+                        <p class="text-sm text-gray-700">Rekaman semua sesi, bisa ditonton ulang</p>
                     </li>
                     <li class="flex items-start gap-2">
                         <svg class="flex-shrink-0 w-4 h-4 text-green-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
@@ -937,10 +917,6 @@
                     <li class="flex items-start gap-2">
                         <svg class="flex-shrink-0 w-4 h-4 text-green-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                         <p class="text-sm text-gray-700">Akses grup WA privat alumni</p>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <svg class="flex-shrink-0 w-4 h-4 text-green-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                        <p class="text-sm text-gray-700">Merchandise eksklusif</p>
                     </li>
                 </ul>
 
