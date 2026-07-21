@@ -186,7 +186,7 @@
             </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
 
             {{-- Renra --}}
             <div class="bg-white border border-gray-100 rounded-2xl p-6 sm:p-7 shadow-sm">
@@ -258,6 +258,43 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
                         </svg>
                         <p class="text-sm text-gray-600">Pengalaman handle B2B & offline business</p>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Ivan (Google Indonesia) --}}
+            <div class="bg-white border border-gray-100 rounded-2xl p-6 sm:p-7 shadow-sm">
+                <div class="flex items-center gap-4 mb-5 pb-5 border-b border-gray-100">
+                    <div class="flex-shrink-0 w-16 h-16 rounded-full bg-blue-700 text-white flex items-center justify-center font-bold text-2xl">
+                        IR
+                    </div>
+                    <div>
+                        <p class="font-bold text-gray-900 text-lg">Ivan Ruben Darmawan</p>
+                        <p class="text-sm text-gray-600">Tim Google Indonesia</p>
+                        <p class="text-xs text-brand font-semibold mt-1">Guest Speaker · 1 sesi khusus</p>
+                    </div>
+                </div>
+                <p class="body-default mb-5">
+                    Bagian dari tim Google Indonesia yang telah membantu banyak bisnis di Indonesia berkembang lewat Google Ads. Membawakan sesi khusus langsung dari sisi Google tentang best practice terbaru.
+                </p>
+                <div class="space-y-2">
+                    <div class="flex items-center gap-2">
+                        <svg class="flex-shrink-0 w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        <p class="text-sm text-gray-600">Tim Google Indonesia</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <svg class="flex-shrink-0 w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        <p class="text-sm text-gray-600">Mendampingi pertumbuhan bisnis lewat Google Ads</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <svg class="flex-shrink-0 w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        <p class="text-sm text-gray-600">Best practice langsung dari Google</p>
                     </div>
                 </div>
             </div>
