@@ -264,6 +264,27 @@
 
         </div>
 
+        {{-- Social proof: kurikulum disusun bersama Google. Foto dari CDN ImageKit
+             (lanskap 2:1), ditampilkan ukuran natural agar tidak terpotong. --}}
+        <div class="max-w-4xl mx-auto mt-12 lg:mt-16">
+            <div class="rounded-2xl border border-gray-200 bg-gray-50/50 p-4 sm:p-6 shadow-sm">
+                <div class="grid grid-cols-1 md:grid-cols-2 items-center gap-6">
+                    <img src="https://ik.imagekit.io/dgmy/kurikulum_.png?updatedAt=1772465987419"
+                         alt="Renra Sedoya menyusun kurikulum Next Gen sambil memegang materi Google Ads dan YouTube Ads"
+                         loading="lazy" class="w-full h-auto rounded-xl shadow-sm">
+                    <div class="px-1 sm:px-2">
+                        <p class="eyebrow">Selaras dengan Google</p>
+                        <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-3 leading-snug">
+                            Kurikulum dibahas langsung bersama tim Google Indonesia
+                        </h3>
+                        <p class="body-text">
+                            Materi Next Gen disusun bersama tim Google Indonesia, memastikan setiap sesi selaras dengan best practice terbaru Google Ads &amp; YouTube Ads — bukan teori usang.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </section>
 
