@@ -188,7 +188,7 @@
                 Tentang Pemateri
             </p>
             <h2 class="heading-section mb-4 leading-[1.2]">
-                Belajar Langsung dari Praktisi Aktif
+                Belajar Langsung dari Google Ads Expert dan Tim Google Indonesia
             </h2>
             <p class="body-text">
                 Pemateri Next Gen adalah praktisi Google Ads yang setiap hari masih aktif kelola campaign klien real. Bukan trainer yang cuma teori, tapi yang benar-benar paham realita di lapangan.
